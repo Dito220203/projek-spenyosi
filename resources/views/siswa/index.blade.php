@@ -163,26 +163,222 @@
                                                             <div class="form-group">
 
                                                                 <label for="bangunpagi">Bangun Pagi</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="bangunpagi" name="bangunpagi" autofocus required>
-                                                                <label for="beribadah">Beribadah</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="beribadah" name="beribadah" autofocus required>
+                                                                <div>
+                                                                    <input type="text" class="form-control"
+                                                                        id="bangunpagi" name="bangunpagi" readonly
+                                                                        required>
+                                                                    <label><input type="checkbox" id="ambilJamBangun">
+                                                                        Ambil Jam</label>
+                                                                </div>
+
+                                                                <script>
+                                                                    document.addEventListener("DOMContentLoaded", function() {
+                                                                        const checkbox = document.getElementById('ambilJamBangun');
+                                                                        const bangunPagiInput = document.getElementById('bangunpagi');
+
+                                                                        checkbox.addEventListener('change', function() {
+                                                                            if (this.checked) {
+                                                                                const now = new Date();
+                                                                                const formattedTime = now.toLocaleTimeString('id-ID', {
+                                                                                    hour: '2-digit',
+                                                                                    minute: '2-digit',
+                                                                                    second: '2-digit'
+                                                                                });
+                                                                                bangunPagiInput.value = formattedTime;
+                                                                            } else {
+                                                                                bangunPagiInput.value = '';
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                </script>
+
+
+
+                                                                <label>Beribadah</label>
+                                                                <div>
+                                                                    <label><input type="checkbox" class="salat-checkbox"
+                                                                            value="subuh"> Subuh</label>
+                                                                    <div class="upload-container"
+                                                                        style="display:none;">
+                                                                        <input type="file" class="salat-image"
+                                                                            accept="image/*">
+                                                                        <span class="upload-status"
+                                                                            style="display:none; color:green; font-weight:bold;">✔️
+                                                                            Upload berhasil</span>
+                                                                        <input type="text" class="salat-time"
+                                                                            readonly
+                                                                            style="display:none; margin-top:5px;">
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <label><input type="checkbox"
+                                                                            class="salat-checkbox" value="dzuhur">
+                                                                        Dzuhur</label>
+                                                                    <div class="upload-container"
+                                                                        style="display:none;">
+                                                                        <input type="file" class="salat-image"
+                                                                            accept="image/*">
+                                                                        <span class="upload-status"
+                                                                            style="display:none; color:green; font-weight:bold;">✔️
+                                                                            Upload berhasil</span>
+                                                                        <input type="text" class="salat-time"
+                                                                            readonly
+                                                                            style="display:none; margin-top:5px;">
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <label><input type="checkbox"
+                                                                            class="salat-checkbox" value="ashar">
+                                                                        Ashar</label>
+                                                                    <div class="upload-container"
+                                                                        style="display:none;">
+                                                                        <input type="file" class="salat-image"
+                                                                            accept="image/*">
+                                                                        <span class="upload-status"
+                                                                            style="display:none; color:green; font-weight:bold;">✔️
+                                                                            Upload berhasil</span>
+                                                                        <input type="text" class="salat-time"
+                                                                            readonly
+                                                                            style="display:none; margin-top:5px;">
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <label><input type="checkbox"
+                                                                            class="salat-checkbox" value="maghrib">
+                                                                        Maghrib</label>
+                                                                    <div class="upload-container"
+                                                                        style="display:none;">
+                                                                        <input type="file" class="salat-image"
+                                                                            accept="image/*">
+                                                                        <span class="upload-status"
+                                                                            style="display:none; color:green; font-weight:bold;">✔️
+                                                                            Upload berhasil</span>
+                                                                        <input type="text" class="salat-time"
+                                                                            readonly
+                                                                            style="display:none; margin-top:5px;">
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <label><input type="checkbox"
+                                                                            class="salat-checkbox" value="isya">
+                                                                        Isya</label>
+                                                                    <div class="upload-container"
+                                                                        style="display:none;">
+                                                                        <input type="file" class="salat-image"
+                                                                            accept="image/*">
+                                                                        <span class="upload-status"
+                                                                            style="display:none; color:green; font-weight:bold;">✔️
+                                                                            Upload berhasil</span>
+                                                                        <input type="text" class="salat-time"
+                                                                            readonly
+                                                                            style="display:none; margin-top:5px;">
+                                                                    </div>
+                                                                </div>
+
+                                                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                                                <script>
+                                                                    $(document).ready(function() {
+                                                                        $('.salat-checkbox').change(function() {
+                                                                            const container = $(this).closest('div').find('.upload-container');
+                                                                            if ($(this).is(':checked')) {
+                                                                                container.show();
+                                                                            } else {
+                                                                                container.hide();
+                                                                                container.find('.upload-status').hide();
+                                                                                container.find('.salat-image').val('');
+                                                                                container.find('.salat-time').hide().val('');
+                                                                            }
+                                                                        });
+
+                                                                        $('.salat-image').change(function() {
+                                                                            const status = $(this).siblings('.upload-status');
+                                                                            const timeField = $(this).siblings('.salat-time');
+                                                                            if ($(this).val()) {
+                                                                                status.show();
+                                                                                const now = new Date();
+                                                                                const formattedTime = now.toLocaleTimeString('id-ID', {
+                                                                                    hour: '2-digit',
+                                                                                    minute: '2-digit',
+                                                                                    second: '2-digit'
+                                                                                });
+                                                                                timeField.val(formattedTime).show();
+                                                                            } else {
+                                                                                status.hide();
+                                                                                timeField.hide().val('');
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                </script>
+
+                                                                {{-- olahraga --}}
                                                                 <label for="berolahraga">Berolahraga</label>
+                                                                <div
+                                                                    style="display: flex; align-items: center; gap: 10px;">
+                                                                    <div style="flex: 1;">
+                                                                        <label
+                                                                            for="keteranganOlahraga">Keterangan:</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="keteranganOlahraga"
+                                                                            name="keteranganOlahraga"
+                                                                            placeholder="Isi keterangan">
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="uploadOlahraga">Upload
+                                                                            Bukti:</label>
+                                                                        <input type="file" id="uploadOlahraga"
+                                                                            accept="image/*">
+                                                                        <span id="statusOlahraga"
+                                                                            style="display:none; color:green; font-weight:bold;">✔️
+                                                                            Upload berhasil</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <script>
+                                                                    document.addEventListener("DOMContentLoaded", function() {
+                                                                        const checkbox = document.getElementById('ambilJamBangun');
+                                                                        const bangunPagiInput = document.getElementById('bangunpagi');
+
+                                                                        checkbox.addEventListener('change', function() {
+                                                                            if (this.checked) {
+                                                                                const now = new Date();
+                                                                                const formattedTime = now.toLocaleTimeString('id-ID', {
+                                                                                    hour: '2-digit',
+                                                                                    minute: '2-digit',
+                                                                                    second: '2-digit'
+                                                                                });
+                                                                                bangunPagiInput.value = formattedTime;
+                                                                            } else {
+                                                                                bangunPagiInput.value = '';
+                                                                            }
+                                                                        });
+
+                                                                        const uploadOlahraga = document.getElementById('uploadOlahraga');
+                                                                        const statusOlahraga = document.getElementById('statusOlahraga');
+
+                                                                        uploadOlahraga.addEventListener('change', function() {
+                                                                            if (this.files.length > 0) {
+                                                                                statusOlahraga.style.display = 'inline';
+                                                                            } else {
+                                                                                statusOlahraga.style.display = 'none';
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                </script>
+
+
+                                                                <label for="makansehatbergizi">Makan Sehat
+                                                                    Bergizi</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="berolahraga" name="berolahraga" autofocus required>
-                                                                <label for="gemarbelajar">Gemar Belajar</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="gemarbelajar" name="gemarbelajar" autofocus required>
-                                                                <label for="makansehatbergizi">Makan Sehat Bergizi</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="makansehatbergizi" name="makansehatbergizi" autofocus required>
+                                                                    id="makansehatbergizi" name="makansehatbergizi"
+                                                                    autofocus required>
                                                                 <label for="bermasyarakat">bermasyarakat</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="bermasyarakat" name="bermasyarakat" autofocus required>
+                                                                    id="bermasyarakat" name="bermasyarakat" autofocus
+                                                                    required>
                                                                 <label for="istirahat">Istirahat Cukup</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="istirahat" name="istirahat" autofocus required>
+                                                                    id="istirahat" name="istirahat" autofocus
+                                                                    required>
 
                                                             </div>
                                                             <button type="submit"
