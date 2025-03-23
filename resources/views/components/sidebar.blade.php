@@ -20,7 +20,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item ">
-                    <a href="/" class="nav-link">
+                    <a href="/admin" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -37,7 +37,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                          <a href="./index.html" class="nav-link ">
+                          <a href="/VIIA" class="nav-link ">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII A</p>
                           </a>
@@ -52,6 +52,42 @@
                           <a href="./index3.html" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII C</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VII D</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VII E</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VII F</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VII G</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VII H</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VII I</p>
                           </a>
                         </li>
                       </ul>
@@ -83,37 +119,45 @@
                             <p>VIII C</p>
                           </a>
                         </li>
-                      </ul>
-                </li>
-                <li class="nav-item ">
-                    <a href="#" class="nav-link ">
-                        <i class="nav-icon fa-solid fa-landmark"></i>
-                      <p>
-                        KELAS IX
-                        <i class="right fas fa-angle-left"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
                         <li class="nav-item">
-                          <a href="./index.html" class="nav-link ">
+                          <a href="./index3.html" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>IX A</p>
-                          </a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="./index2.html" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>IX B</p>
+                            <p>VIII D</p>
                           </a>
                         </li>
                         <li class="nav-item">
                           <a href="./index3.html" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>IX C</p>
+                            <p>VIII E</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VIII F</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VIII G</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VIII H</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="./index3.html" class="nav-link">
+                            <i class="fa-solid fa-house-user nav-icon"></i>
+                            <p>VIII I</p>
                           </a>
                         </li>
                       </ul>
                 </li>
+
                 <li class="nav-item">
                     <a href="/logout" class="nav-link">
                         <i class="nav-icon fa-solid fa-right-from-bracket"></i>
