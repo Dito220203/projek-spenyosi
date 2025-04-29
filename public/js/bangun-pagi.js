@@ -63,3 +63,52 @@ window.onload = checkStatus;
 
 // Event listener untuk tombol Save
 document.getElementById("save-btn").addEventListener("click", saveStatus);
+
+$(document).ready( function () {
+    const saveBtn = $("#save-btn");
+    const checkIcon = $("#check-icon");
+    const currentTimeSpan = $("#current-time");
+
+    function getCurrentTime() {
+        const now = new Date();
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${hours}:${minutes}:${seconds}`;
+    }
+
+    // Tampilkan jam saat ini
+    setInterval(() => {
+        currentTimeSpan.textContent = getCurrentTime();
+    }, 1000);
+
+    $("#form-bgnpagi").on("submit",function(e){
+        e.preventDefault();
+        const currentTime = getCurrentTime();
+        console.log("Data yang dikirim:", {
+            waktu: currentTime
+        });
+        $.ajax({
+            url : `/bangun-pagi`,
+            type : 'POST',
+            contentType: 'application/json',
+            headers : {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+            },
+            data : JSON.stringify({
+                waktu:currentTime,
+            }),
+
+
+            success: function(res){
+                window.location.href = '/siswa';
+            }
+
+        })
+    })
+
+});
+
+

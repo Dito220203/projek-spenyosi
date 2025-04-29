@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Beribadah extends Model
+class Istirahat extends Model
 {
     use HasFactory;
-    protected $table = 'beribadahs';
-    protected $fillable = ['id_siswa','subuh','duhur','asar','magrib','isyak'];
+    protected $table = 'istirahats';
+    protected $fillable = ['id_siswa','waktu'];
 
     public function siswa():BelongsTo{
         return $this->belongsTo(Siswa::class,'id_siswa');

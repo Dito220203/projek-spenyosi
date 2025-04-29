@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <title>7 Kebiasaan Anak</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -46,8 +48,17 @@
     .user-info {
         position: absolute;
         right: 20px;
-        top: 10px;
-        text-align: right;
+        top: 90px;
+        display: flex;
+        /* flex-direction: column; */
+        /* ini bikin kontennya vertikal */
+        gap: 2px;
+
+        padding-left: 55px;
+        display: flex; /* ini bikin isinya horizontal */
+    gap: 10px; /* beri jarak antar elemen, opsional */
+    align-items: center; /* supaya sejajar secara vertikal */
+        /* teks rata kanan */
     }
 
     .user-info h6,
@@ -64,18 +75,21 @@
     }
 
     .progress-bar {
+        background: #e0e0e0;
+        border-radius: 8px;
+        height: 20px;
         width: 100%;
-        background-color: #ddd;
-        border-radius: 5px;
         overflow: hidden;
     }
 
     .progress {
-        width: 30%;
-        background-color: #ffd700;
-        text-align: right;
-        padding-right: 5px;
-        color: black;
+        background-color: #007bff;
+        height: 100%;
+        width: 0%;
+        color: white;
+        text-align: center;
+        line-height: 20px;
+        transition: width 0.4s ease-in-out;
     }
 
     .container {
@@ -86,13 +100,15 @@
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         border: 1px solid rgb(0, 0, 0);
         max-width: 1340px;
-        /* margin-left: auto;
-        margin-right: auto; */
+        margin-left: auto;
+        margin-right: auto;
         padding-left: 55px;
+        padding-right: 55px;
         position: relative;
         /* Biar posisi anaknya bisa diatur */
         /* Jarak dari kiri */
     }
+
 
     .carousel {
         display: flex;
@@ -185,97 +201,132 @@
 </style>
 
 <body>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
-            Swal.fire({
-                title: '7 Kebiasaan Anak Indonesia Hebat',
-                text: 'Ayo mulai perjalanan hebatmu!',
-                imageUrl: '/images/pop-up-mulai.png',
-                imageWidth: 400,
-                imageAlt: '7 Kebiasaan',
-                confirmButtonText: 'MULAI',
-                confirmButtonColor: '#FF8C00'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/simpan-kebiasaan',
-                        type: 'POST',
-                        data: {
-                            mulai: true
-                        },
-                        success: function(response) {
-                            window.location.href = '/siswa';
-                        }
-                    });
-                }
-            });
+            if (!sessionStorage.getItem('sudahMulai')) {
+                Swal.fire({
+                    title: '7 Kebiasaan Anak Indonesia Hebat',
+                    text: 'Ayo mulai perjalanan hebatmu!',
+                    imageUrl: '/images/pop-up-mulai.png',
+                    imageWidth: 400,
+                    imageAlt: '7 Kebiasaan',
+                    confirmButtonText: 'MULAI',
+                    confirmButtonColor: '#FF8C00'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/simpan-kebiasaan',
+                            type: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {
+                                mulai: true
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    sessionStorage.setItem('sudahMulai', 'true');
+                                    window.location.href = '/siswa';
+                                } else {
+                                    alert("Gagal menyimpan data!");
+                                }
+                            },
+                            error: function(xhr) {
+                                console.log("Error:", xhr.responseText);
+                                alert("Terjadi kesalahan, cek console!");
+                            }
+                        });
+                    }
+                });
+            } else {
+                // Reset flag saat halaman /siswa sudah terbuka agar alert bisa muncul lagi kalau user balik
+                sessionStorage.removeItem('sudahMulai');
+            }
         });
-    </script>
+    </script> --}}
+
     <div class="header">
         <img src="{{ asset('img/logo.png') }}" alt="Logo">
         <span>SPENYOSI</span>
-        {{-- <div class="user-info">
-            <h6>Dito Febriansyah</h6>
+        <div class="user-info">
+            {{-- <h6>Dito Febriansyah</h6>
             <h6>VII A</h6>
-            <h6>Islam</h6>
-            <a href="#">Log Out</a>
-        </div> --}}
-        <a href="" style="float: right;">Log Out</a>
+            <h6>Islam</h6> --}}
+            {{-- <a href="#">Log Out</a> --}}
+
+        </div>
 
     </div>
     <div class="status-bar">
         <strong>Status Pekerjaan</strong>
         <p>7 Kebiasaan Anak</p>
         <div class="progress-bar">
-            <div class="progress">30%</div>
+            <div class="progress">0%</div>
         </div>
     </div>
-    <!-- Tambahkan script jQuery jika belum ada -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <!-- Tambahkan event listener untuk Status Pekerjaan -->
     <script>
-        $(document).ready(function() {
-            $('.status-bar').click(function() { // Ubah event listener ke seluruh kotak status-bar
-                const kebiasaan = [
-                    'Bangun Pagi',
-                    'Beribadah',
-                    'Berolahraga',
-                    'Gemar Belajar',
-                    'Makan Sehat & Bergizi',
-                    'Bermasyarakat',
-                    'Istirahat Cukup'
-                ];
+        let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
 
-                let listKebiasaan = '<ul>';
-                kebiasaan.forEach(function(item) {
-                    listKebiasaan += `<li>${item}</li>`;
-                });
-                listKebiasaan += '</ul>';
+        function updateProgress(data) {
+            const kebiasaan = [
+                'Bangun Pagi',
+                'Beribadah',
+                'Berolahraga',
+                'Gemar Belajar',
+                'Makan Sehat & Bergizi',
+                'Bermasyarakat',
+                'Istirahat Cukup'
+            ];
 
+            let totalSelesai = 0;
+            let listKebiasaan = '<ul style="list-style:none;">';
+
+            kebiasaan.forEach(function (item) {
+                if (data[item]) {
+                    totalSelesai++;
+                    listKebiasaan += `<li>✅ ${item}</li>`;
+                } else {
+                    listKebiasaan += `<li>⬜ ${item}</li>`;
+                }
+            });
+
+            listKebiasaan += '</ul>';
+            listKebiasaanHtml = listKebiasaan; // Simpan untuk nanti saat modal dibuka
+
+            let progress = Math.round((totalSelesai / kebiasaan.length) * 100);
+            $('.progress').css('width', `${progress}%`).text(`${progress}%`);
+        }
+
+        $(document).ready(function () {
+            // Load data dan update progress saat halaman dimuat
+            $.get('/siswa/status-kebiasaan', function (data) {
+                updateProgress(data);
+            });
+
+            // Modal hanya dibuka saat user klik
+            $('.status-bar').click(function () {
                 const popupContent = `
-                <div class="modal fade" id="kebiasaanModal" tabindex="-1" aria-labelledby="kebiasaanModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="kebiasaanModalLabel">7 Kebiasaan Anak</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                ${listKebiasaan}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <div class="modal fade" id="kebiasaanModal" tabindex="-1" aria-labelledby="kebiasaanModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="kebiasaanModalLabel">7 Kebiasaan Anak</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ${listKebiasaanHtml}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            `;
+                    </div>`;
 
                 $('body').append(popupContent);
                 $('#kebiasaanModal').modal('show');
-
-                $('#kebiasaanModal').on('hidden.bs.modal', function() {
+                $('#kebiasaanModal').on('hidden.bs.modal', function () {
                     $('#kebiasaanModal').remove();
                 });
             });
@@ -283,29 +334,37 @@
     </script>
 
 
+
+
+
     <!-- Modal bangun pagi -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Bangun Pagi</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="">
+            <form action="{{ route('bangunpagi') }}" method="post" id="form-bgnpagi"> <!-- FORM DIMULAI DI SINI -->
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Bangun Pagi</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
                         <p id="time-display">Waktu saat ini: <span id="current-time"></span></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
 
-                    <button type="button" class="btn btn-primary" id="save-btn">
-                        Simpan <span id="check-icon" style="display: none;">✔️</span>
-                    </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+
+
+                        <button type="submit" class="btn btn-primary" id="save-btn">
+                            Simpan <span id="check-icon" style="display: none;">✔️</span>
+                        </button>
+                    </div>
                 </div>
             </form>
-            </div>
         </div>
     </div>
+    <!-- Panggil file JavaScript -->
+
 
     <!-- Modal Beribadah -->
     <div class="modal fade" id="exampleModalBeribadah" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
@@ -317,54 +376,28 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formBeribadah">
+                    <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
+                        @csrf
                         <label>Beribadah</label>
                         <div>
                             <label><input type="checkbox" class="salat-checkbox" value="subuh"> Subuh</label>
-                            <div class="upload-container" style="display:none;">
-                                <input type="file" class="salat-image" accept="image/*">
-                                <span class="upload-status" style="display:none; color:green; font-weight:bold;">✔️
-                                    Upload berhasil</span>
-                                <input type="text" class="salat-time" readonly style="display:none; margin-top:5px;">
-                            </div>
+                            <input type="time" class="salat-time form-control mt-1" name="subuh" readonly hidden>
                         </div>
                         <div>
                             <label><input type="checkbox" class="salat-checkbox" value="dzuhur"> Dzuhur</label>
-                            <div class="upload-container" style="display:none;">
-                                <input type="file" class="salat-image" accept="image/*">
-                                <span class="upload-status" style="display:none; color:green; font-weight:bold;">✔️
-                                    Upload berhasil</span>
-                                <input type="text" class="salat-time" readonly style="display:none; margin-top:5px;">
-                            </div>
+                            <input type="time" class="salat-time form-control mt-1" name="duhur" readonly hidden>
                         </div>
                         <div>
                             <label><input type="checkbox" class="salat-checkbox" value="ashar"> Ashar</label>
-                            <div class="upload-container" style="display:none;">
-                                <input type="file" class="salat-image" accept="image/*">
-                                <span class="upload-status" style="display:none; color:green; font-weight:bold;">✔️
-                                    Upload berhasil</span>
-                                <input type="text" class="salat-time" readonly style="display:none; margin-top:5px;">
-                            </div>
+                            <input type="time" class="salat-time form-control mt-1" name="asar" readonly hidden>
                         </div>
                         <div>
                             <label><input type="checkbox" class="salat-checkbox" value="maghrib"> Maghrib</label>
-                            <div class="upload-container" style="display:none;">
-                                <input type="file" class="salat-image" accept="image/*">
-                                <span class="upload-status" style="display:none; color:green; font-weight:bold;">✔️
-                                    Upload berhasil</span>
-                                <input type="text" class="salat-time" readonly
-                                    style="display:none; margin-top:5px;">
-                            </div>
+                            <input type="time" class="salat-time form-control mt-1" name="magrib" readonly hidden>
                         </div>
                         <div>
                             <label><input type="checkbox" class="salat-checkbox" value="isya"> Isya</label>
-                            <div class="upload-container" style="display:none;">
-                                <input type="file" class="salat-image" accept="image/*">
-                                <span class="upload-status" style="display:none; color:green; font-weight:bold;">✔️
-                                    Upload berhasil</span>
-                                <input type="text" class="salat-time" readonly
-                                    style="display:none; margin-top:5px;">
-                            </div>
+                            <input type="time" class="salat-time form-control mt-1" name="isyak" readonly hidden>
                         </div>
                     </form>
                 </div>
@@ -375,39 +408,59 @@
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('.salat-checkbox').change(function() {
-                const container = $(this).closest('div').find('.upload-container');
-                if ($(this).is(':checked')) {
-                    container.show();
-                } else {
-                    container.hide();
-                    container.find('.upload-status').hide();
-                    container.find('.salat-image').val('');
-                    container.find('.salat-time').hide().val('');
-                }
-            });
 
-            $('.salat-image').change(function() {
-                const status = $(this).siblings('.upload-status');
-                const timeField = $(this).siblings('.salat-time');
-                if ($(this).val()) {
-                    status.show();
-                    const now = new Date();
-                    const formattedTime = now.toLocaleTimeString('id-ID', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    });
-                    timeField.val(formattedTime).show();
-                } else {
-                    status.hide();
-                    timeField.hide().val('');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.salat-checkbox');
+
+            // Hari sekarang (format: YYYY-MM-DD)
+            const today = new Date().toISOString().split('T')[0];
+
+            // Cek localStorage dan isi ulang checkbox + waktu
+            checkboxes.forEach(function(checkbox) {
+                const value = checkbox.value;
+                const timeInput = checkbox.closest('div').querySelector('.salat-time');
+                const dataKey = `salat_${value}`;
+
+                const saved = localStorage.getItem(dataKey);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.date === today) {
+                        checkbox.checked = true;
+                        timeInput.value = parsed.time;
+                        timeInput.style.display = 'block';
+                    } else {
+                        // Hapus data jika sudah lewat hari
+                        localStorage.removeItem(dataKey);
+                    }
                 }
+
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        const now = new Date();
+                        const jam = now.getHours().toString().padStart(2, '0');
+                        const menit = now.getMinutes().toString().padStart(2, '0');
+                        const waktu = `${jam}:${menit}`;
+
+                        timeInput.value = waktu;
+                        timeInput.style.display = 'block';
+
+                        // Simpan ke localStorage
+                        localStorage.setItem(dataKey, JSON.stringify({
+                            time: waktu,
+                            date: today
+                        }));
+                    } else {
+                        timeInput.value = '';
+                        timeInput.style.display = 'none';
+                        localStorage.removeItem(dataKey);
+                    }
+                });
             });
         });
     </script>
+
+
 
     {{-- modal Olahraga --}}
     <div class="modal fade" id="exampleModalOlahraga" tabindex="-1" aria-labelledby="exampleModalOlahragaLabel"
@@ -419,65 +472,52 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="olahragaForm" action="#" method="">
-
+                    <form id="olahragaForm" action="{{ route('olahraga') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
+
                         <div class="mb-3">
-                            <label for="waktu_olahraga" class="form-label">Waktu Berolahraga</label>
-                            <input type="time" class="form-control" id="waktu_olahraga" name="waktu_olahraga"
-                                required>
+                            <label for="foto_masyarakat" class="form-label">Upload Foto Kegiatan</label>
+                            <input type="file" class="form-control" id="foto_masyarakat" name="image"
+                                accept="image/*" required>
                         </div>
+
+                        {{-- Waktu Otomatis --}}
                         <div class="mb-3">
-                            <label for="jenis_olahraga" class="form-label">Jenis Olahraga</label>
-                            <input type="text" class="form-control" id="jenis_olahraga" name="jenis_olahraga"
-                                required>
+                            <label for="waktu_olahraga_display" class="form-label">Waktu Upload</label>
+                            <input type="text" class="form-control" id="waktu_olahraga_display" readonly>
+                            <input type="hidden" name="waktu" id="waktu_olahraga">
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    {{-- Script --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const waktuOlahragaInput = document.getElementById('waktu_olahraga');
+        document.getElementById('foto_masyarakat').addEventListener('change', function() {
             const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            waktuOlahragaInput.value = `${hours}:${minutes}`;
+            const waktu = now.getHours().toString().padStart(2, '0') + ':' +
+                now.getMinutes().toString().padStart(2, '0') + ':' +
+                now.getSeconds().toString().padStart(2, '0');
 
-            const centang = localStorage.getItem('centangOlahraga');
-            const lastSubmit = localStorage.getItem('lastSubmitOlahraga');
-            const simpanButton = document.getElementById('simpanButton');
+            // Tampilkan di input text
+            document.getElementById('waktu_olahraga_display').value = waktu;
 
-            if (centang === 'true' && lastSubmit && new Date().toDateString() === new Date(lastSubmit)
-                .toDateString()) {
-                document.getElementById('centang').style.display = 'inline';
-                simpanButton.disabled = true;
-            }
-
-            const resetTime = new Date();
-            resetTime.setHours(0, 0, 0, 0);
-            if (now >= resetTime) {
-                localStorage.removeItem('centangOlahraga');
-                localStorage.removeItem('lastSubmitOlahraga');
-                simpanButton.disabled = false;
-                document.getElementById('centang').style.display = 'none';
-            }
-
-            document.getElementById('olahragaForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-                localStorage.setItem('centangOlahraga', 'true');
-                localStorage.setItem('lastSubmitOlahraga', new Date().toISOString());
-                document.getElementById('centang').style.display = 'inline';
-                simpanButton.disabled = true;
-                this.submit();
-            });
+            // Simpan ke input hidden
+            document.getElementById('waktu_olahraga').value = waktu;
         });
     </script>
+
+
+
+
 
     {{-- modalgemar belajar --}}
     <div class="modal fade" id="exampleModalBelajar" tabindex="-1" aria-labelledby="exampleModalBelajarLabel"
@@ -489,12 +529,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="" action="#" method="POST">
+                    <form id="form-Belajar" action="{{ route('belajar') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
-                            <label for="materi_belajar" class="form-label">Materi yang Dipelajari</label>
-                            <input type="text" class="form-control" id="materi_belajar" name="materi_belajar"
-                                required>
+                            <div class="mb-3">
+                                <label for="foto_belajar" class="form-label">Upload Foto Belajar</label>
+                                <input type="file" class="form-control" id="foto_belajar" name="image"
+                                    accept="image/*" required>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -515,14 +558,16 @@
                     <h5 class="modal-title" id="exampleModalMakanLabel">Input Data Makan Sehat</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="POST">
+                <form action="{{ route('makan') }}" method="POST" id="form-Makan" enctype="multipart/form-data">
                     @csrf
-                    @method('PATCH')
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="makan_sehat" class="form-label">Waktu Makan Sehat</label>
-                            <input type="text" class="form-control" id="makan_sehat" name="makan" required>
+                            <label for="foto_makan" class="form-label">Upload Foto Makanan</label>
+                            <input type="file" class="form-control" id="foto_makan" name="image"
+                                accept="image/*" required>
                         </div>
+                        <label for="makan_sehat" class="form-label">Keterangan</label>
+                        <input type="text" class="form-control" id="makan_sehat" name="keterangan" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -542,17 +587,17 @@
                     <h5 class="modal-title" id="exampleModalMasyarakatLabel">Input Data Bermasyarakat</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('masyarakat') }}" method="POST" id="form-Masyarakat"
+                    enctype="multipart/form-data">
                     @csrf
-                    @method('PATCH')
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="keterangan_masyarakat" class="form-label">Keterangan Kegiatan</label>
-                            <textarea class="form-control" id="keterangan_masyarakat" name="bermasyarakat" rows="3" required></textarea>
+                            <textarea class="form-control" id="keterangan_masyarakat" name="keterangan" rows="3" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="foto_masyarakat" class="form-label">Upload Foto Kegiatan</label>
-                            <input type="file" class="form-control" id="foto_masyarakat" name="foto_masyarakat"
+                            <input type="file" class="form-control" id="foto_masyarakat" name="image"
                                 accept="image/*" required>
                         </div>
                     </div>
@@ -565,8 +610,7 @@
         </div>
     </div>
 
-
-    {{-- modalistirahhat --}}
+    {{-- modalistirahat --}}
     <div class="modal fade" id="exampleModalIstirahat" tabindex="-1" aria-labelledby="exampleModalIstirahatLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -575,18 +619,12 @@
                     <h5 class="modal-title" id="exampleModalIstirahatLabel">Input Data Waktu Istirahat</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="POST">
+                <form action="{{ route('istirahat') }}" method="POST" id="form-Istirahat">
                     @csrf
-                    @method('PATCH')
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="waktu_istirahat" class="form-label">Waktu Istirahat</label>
-                            <input type="text" class="form-control" id="waktu_istirahat" name="waktu_istirahat"
-                                value="{{ now()->format('H:i') }}" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="keterangan_istirahat" class="form-label">Keterangan Istirahat</label>
-                            <textarea class="form-control" id="keterangan_istirahat" name="keterangan_istirahat" rows="3" required></textarea>
+                            <input type="text" class="form-control" id="current-time" name="waktu" readonly>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -597,6 +635,18 @@
             </div>
         </div>
     </div>
+
+    {{-- Script untuk isi otomatis jam saat ini ketika modal dibuka --}}
+    <script>
+        const modalIstirahat = document.getElementById('exampleModalIstirahat');
+        modalIstirahat.addEventListener('shown.bs.modal', function() {
+            const now = new Date();
+            const jam = now.getHours().toString().padStart(2, '0');
+            const menit = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('current-time').value = `${jam}:${menit}`;
+        });
+    </script>
+
 
 
 
@@ -668,8 +718,7 @@
         </div>
     </div>
 
-    <!-- Panggil file JavaScript -->
-    <script src="{{ asset('js/bangun-pagi.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
     </script>
@@ -678,7 +727,7 @@
     </script>
     <script src="{{ asset('js/script.js') }}"></script>
 
-
+    <script src="{{ asset('js/bangun-pagi.js') }}"></script>
 </body>
 
 </html>
