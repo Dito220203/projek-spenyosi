@@ -14,6 +14,7 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/beribadah.js') }}"></script> {{-- Contoh file JS eksternal --}}
 
 </head>
 <style>
@@ -55,9 +56,12 @@
         gap: 2px;
 
         padding-left: 55px;
-        display: flex; /* ini bikin isinya horizontal */
-    gap: 10px; /* beri jarak antar elemen, opsional */
-    align-items: center; /* supaya sejajar secara vertikal */
+        display: flex;
+        /* ini bikin isinya horizontal */
+        gap: 10px;
+        /* beri jarak antar elemen, opsional */
+        align-items: center;
+        /* supaya sejajar secara vertikal */
         /* teks rata kanan */
     }
 
@@ -249,9 +253,10 @@
         <img src="{{ asset('img/logo.png') }}" alt="Logo">
         <span>SPENYOSI</span>
         <div class="user-info">
-            {{-- <h6>Dito Febriansyah</h6>
-            <h6>VII A</h6>
-            <h6>Islam</h6> --}}
+            <a href=""><i class="fa-solid fa-right-from-bracket"></i></a>
+            <h6>{{ auth()->user()->nama }}</h6>
+            <h6>{{ auth()->user()->kelas }}</h6>
+            <h6>{{ auth()->user()->agama }}</h6>
             {{-- <a href="#">Log Out</a> --}}
 
         </div>
@@ -282,7 +287,7 @@
             let totalSelesai = 0;
             let listKebiasaan = '<ul style="list-style:none;">';
 
-            kebiasaan.forEach(function (item) {
+            kebiasaan.forEach(function(item) {
                 if (data[item]) {
                     totalSelesai++;
                     listKebiasaan += `<li>✅ ${item}</li>`;
@@ -298,14 +303,14 @@
             $('.progress').css('width', `${progress}%`).text(`${progress}%`);
         }
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Load data dan update progress saat halaman dimuat
-            $.get('/siswa/status-kebiasaan', function (data) {
+            $.get('/siswa/status-kebiasaan', function(data) {
                 updateProgress(data);
             });
 
             // Modal hanya dibuka saat user klik
-            $('.status-bar').click(function () {
+            $('.status-bar').click(function() {
                 const popupContent = `
                     <div class="modal fade" id="kebiasaanModal" tabindex="-1" aria-labelledby="kebiasaanModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -326,7 +331,7 @@
 
                 $('body').append(popupContent);
                 $('#kebiasaanModal').modal('show');
-                $('#kebiasaanModal').on('hidden.bs.modal', function () {
+                $('#kebiasaanModal').on('hidden.bs.modal', function() {
                     $('#kebiasaanModal').remove();
                 });
             });
@@ -367,98 +372,152 @@
 
 
     <!-- Modal Beribadah -->
-    <div class="modal fade" id="exampleModalBeribadah" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Beribadah</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
-                        @csrf
-                        <label>Beribadah</label>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="subuh"> Subuh</label>
-                            <input type="time" class="salat-time form-control mt-1" name="subuh" readonly hidden>
-                        </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="dzuhur"> Dzuhur</label>
-                            <input type="time" class="salat-time form-control mt-1" name="duhur" readonly hidden>
-                        </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="ashar"> Ashar</label>
-                            <input type="time" class="salat-time form-control mt-1" name="asar" readonly hidden>
-                        </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="maghrib"> Maghrib</label>
-                            <input type="time" class="salat-time form-control mt-1" name="magrib" readonly hidden>
-                        </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="isya"> Isya</label>
-                            <input type="time" class="salat-time form-control mt-1" name="isyak" readonly hidden>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
+        <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Beribadah</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
+                            @csrf
+                            <label>Beribadah</label>
+                            <div>
+                                <label><input type="checkbox" class="salat-checkbox" value="subuh"> Subuh</label>
+                                <input type="time" class="salat-time form-control mt-1" name="subuh" readonly
+                                    hidden>
+                            </div>
+                            <div>
+                                <label><input type="checkbox" class="salat-checkbox" value="dzuhur"> Dzuhur</label>
+                                <input type="time" class="salat-time form-control mt-1" name="duhur" readonly
+                                    hidden>
+                            </div>
+                            <div>
+                                <label><input type="checkbox" class="salat-checkbox" value="ashar"> Ashar</label>
+                                <input type="time" class="salat-time form-control mt-1" name="asar" readonly
+                                    hidden>
+                            </div>
+                            <div>
+                                <label><input type="checkbox" class="salat-checkbox" value="maghrib"> Maghrib</label>
+                                <input type="time" class="salat-time form-control mt-1" name="magrib" readonly
+                                    hidden>
+                            </div>
+                            <div>
+                                <label><input type="checkbox" class="salat-checkbox" value="isya"> Isya</label>
+                                <input type="time" class="salat-time form-control mt-1" name="isyak" readonly
+                                    hidden>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkboxes = document.querySelectorAll('.salat-checkbox');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkboxes = document.querySelectorAll('.salat-checkbox');
 
-            // Hari sekarang (format: YYYY-MM-DD)
-            const today = new Date().toISOString().split('T')[0];
+                // Hari sekarang (format: YYYY-MM-DD)
+                const today = new Date().toISOString().split('T')[0];
 
-            // Cek localStorage dan isi ulang checkbox + waktu
-            checkboxes.forEach(function(checkbox) {
-                const value = checkbox.value;
-                const timeInput = checkbox.closest('div').querySelector('.salat-time');
-                const dataKey = `salat_${value}`;
+                // Cek localStorage dan isi ulang checkbox + waktu
+                checkboxes.forEach(function(checkbox) {
+                    const value = checkbox.value;
+                    const timeInput = checkbox.closest('div').querySelector('.salat-time');
+                    const dataKey = `salat_${value}`;
 
-                const saved = localStorage.getItem(dataKey);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    if (parsed.date === today) {
-                        checkbox.checked = true;
-                        timeInput.value = parsed.time;
-                        timeInput.style.display = 'block';
-                    } else {
-                        // Hapus data jika sudah lewat hari
-                        localStorage.removeItem(dataKey);
+                    const saved = localStorage.getItem(dataKey);
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        if (parsed.date === today) {
+                            checkbox.checked = true;
+                            timeInput.value = parsed.time;
+                            timeInput.style.display = 'block';
+                        } else {
+                            // Hapus data jika sudah lewat hari
+                            localStorage.removeItem(dataKey);
+                        }
                     }
-                }
 
-                checkbox.addEventListener('change', function() {
-                    if (checkbox.checked) {
-                        const now = new Date();
-                        const jam = now.getHours().toString().padStart(2, '0');
-                        const menit = now.getMinutes().toString().padStart(2, '0');
-                        const waktu = `${jam}:${menit}`;
+                    checkbox.addEventListener('change', function() {
+                        if (checkbox.checked) {
+                            const now = new Date();
+                            const jam = now.getHours().toString().padStart(2, '0');
+                            const menit = now.getMinutes().toString().padStart(2, '0');
+                            const waktu = `${jam}:${menit}`;
 
-                        timeInput.value = waktu;
-                        timeInput.style.display = 'block';
+                            timeInput.value = waktu;
+                            timeInput.style.display = 'block';
 
-                        // Simpan ke localStorage
-                        localStorage.setItem(dataKey, JSON.stringify({
-                            time: waktu,
-                            date: today
-                        }));
-                    } else {
-                        timeInput.value = '';
-                        timeInput.style.display = 'none';
-                        localStorage.removeItem(dataKey);
-                    }
+                            // Simpan ke localStorage
+                            localStorage.setItem(dataKey, JSON.stringify({
+                                time: waktu,
+                                date: today
+                            }));
+                        } else {
+                            timeInput.value = '';
+                            timeInput.style.display = 'none';
+                            localStorage.removeItem(dataKey);
+                        }
+                    });
                 });
             });
+        </script>
+
+        <!-- Modal Beribadah (Kristen - Sederhana) -->
+        <div class="modal fade" id="modalKristen" tabindex="-1"
+            aria-labelledby="exampleModalBeribadahLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Ibadah Harian</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
+                            @csrf
+
+                            <div>
+                                <label><input type="checkbox" name="doa_pagi"> Doa Pagi</label>
+                            </div>
+                            <div>
+                                <label><input type="checkbox" name="alkitab"> Membaca Alkitab / Renungan</label>
+                            </div>
+                            <div>
+                                <label><input type="checkbox" name="doa_malam"> Doa Malam</label>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<script>
+    $(document).ready(function() {
+        $('#btn-beribadah').click(function() {
+            let agama = "{{ auth()->user()->agama }}";
+
+            if (agama === 'Islam') {
+                $('#modalIslam').modal('show');
+            } else if (agama === 'Kristen') {
+                $('#modalKristen').modal('show');
+            } else {
+                alert('Agama tidak dikenali');
+            }
         });
-    </script>
+    });
+</script>
 
 
 
@@ -663,13 +722,14 @@
                         Isi Data
                     </button>
                 </div>
+
                 <div class="card">
                     <h3>Beribadah</h3>
                     <img src="{{ asset('img/agama.png') }}" alt="Beribadah">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#exampleModalBeribadah">
+                    <button type="button" class="btn btn-primary" id="btn-beribadah">
                         Isi Data
                     </button>
+
                 </div>
                 <div class="card">
                     <h3>Berolahraga</h3>

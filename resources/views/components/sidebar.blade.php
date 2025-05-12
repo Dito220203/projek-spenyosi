@@ -6,7 +6,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('img/logo smpyosi.jpeg') }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ asset('img/logo.png') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a href="#" class="d-block">Sistem Kebiasaan Anak</a>
@@ -43,49 +43,49 @@
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index2.html" class="nav-link">
+                          <a href="VIIB" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII B</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIC" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII C</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIID" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII D</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIE" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII E</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIF" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII F</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIG" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII G</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIH" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII H</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIII" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VII I</p>
                           </a>
@@ -102,55 +102,55 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                          <a href="./index.html" class="nav-link ">
+                          <a href="VIIIA" class="nav-link ">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII A</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index2.html" class="nav-link">
+                          <a href="VIIIB" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII B</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIIC" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII C</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIID" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII D</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIIE" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII E</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIIF" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII F</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIIG" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII G</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIIH" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII H</p>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a href="./index3.html" class="nav-link">
+                          <a href="VIIII" class="nav-link">
                             <i class="fa-solid fa-house-user nav-icon"></i>
                             <p>VIII I</p>
                           </a>
@@ -158,8 +158,24 @@
                       </ul>
                 </li>
 
+                {{-- <li class="nav-item">
+                    <a href="tambahsiswa" class="nav-link">
+                        <i class="fa-solid fa-user-plus nav-icon"></i>
+                        <p>
+                            TAMBAH SISWA
+                        </p>
+                    </a>
+                </li> --}}
                 <li class="nav-item">
-                    <a href="/logout" class="nav-link">
+                    <a href="/rekap" class="nav-link">
+                        <i class="fa-solid fa-book nav-icon"></i>
+                        <p>
+                            REKAP
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/loginadmin" class="nav-link">
                         <i class="nav-icon fa-solid fa-right-from-bracket"></i>
                         <p>
                             Logout

@@ -51,7 +51,7 @@
         .login-container img {
             max-width: 200px;
             height: auto;
-            margin-bottom: 8apx;
+            margin-bottom: 10px;
         }
 
 
@@ -72,7 +72,7 @@
         .login-container input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
@@ -100,7 +100,7 @@
         }
 
         .login-container li {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -109,7 +109,7 @@
     <div class="login-container">
         <img src="{{ asset('img/logo.png') }}" alt="Logo">
         <div class="alert alert-danger mt-3" style="font-size: 14px;">
-            Masukkan Username dan Password<br>(Menggunakan NISN & password)
+            Masukkan Username dan Password<br>(Menggunakan username & password)
         </div>
         {{-- <h1>Login</h1> --}}
         @if ($errors->any())
@@ -119,7 +119,8 @@
                 @endforeach
             </div>
         @endif
-        <form method="post" action="{{ route('login.post') }}">
+        <form action="{{ route('loginadmin.authenticate') }}" method="POST">
+
             @csrf
             <ul>
                 <li>
@@ -130,16 +131,12 @@
                     <label for="password">Password:</label>
                     <input type="password" name="password" id="password">
                 </li>
-                {{-- <li>
-                    <label for="role">Login sebagai:</label>
-                    <select name="role" id="role" class="form-control">
-                        <option value="admin">Islam</option>
-                        <option value="walikelas">Kristen</option>
-                    </select>
-                </li> --}}
+
+
                 <li>
                     <button type="submit" name="login">Login</button>
                 </li>
+
             </ul>
         </form>
     </div>
