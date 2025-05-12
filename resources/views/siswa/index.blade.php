@@ -251,8 +251,8 @@
         <div class="user-info">
             {{-- <h6>Dito Febriansyah</h6>
             <h6>VII A</h6>
-            <h6>Islam</h6> --}}
-            {{-- <a href="#">Log Out</a> --}}
+            <h6>Islam</h6>
+            <a href="#">Log Out</a> --}}
 
         </div>
 
@@ -481,12 +481,16 @@
                             <input type="file" class="form-control" id="foto_masyarakat" name="image"
                                 accept="image/*" required>
                         </div>
-
-                        {{-- Waktu Otomatis --}}
+                        
+                      {{-- Waktu Otomatis --}}
                         <div class="mb-3">
                             <label for="waktu_olahraga_display" class="form-label">Waktu Upload</label>
                             <input type="text" class="form-control" id="waktu_olahraga_display" readonly>
                             <input type="hidden" name="waktu" id="waktu_olahraga">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ket_olahraga" class="form-label">Jenis Olahraga</label>
+                            <textarea class="form-control" id="ket_olahraga" name="ket_olahraga" rows="2" required placeholder="Olahraga Apa Kamu Hari Ini ?"></textarea>
                         </div>
 
                         <div class="modal-footer">
@@ -538,6 +542,10 @@
                                 <input type="file" class="form-control" id="foto_belajar" name="image"
                                     accept="image/*" required>
                             </div>
+                            <div class="mb-3">
+                                <label for="ket_belajar" class="form-label">Belajar Apa Aku Hari ini</label>
+                                <textarea class="form-control" id="ket_belajar" name="ket_belajar" rows="2" required placeholder="Masih Ingat Belajar Apa Hari Ini?"></textarea>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -566,8 +574,18 @@
                             <input type="file" class="form-control" id="foto_makan" name="image"
                                 accept="image/*" required>
                         </div>
-                        <label for="makan_sehat" class="form-label">Keterangan</label>
-                        <input type="text" class="form-control" id="makan_sehat" name="keterangan" required>
+                        <div class="mb-3">
+                            <label for="ket_makan" class="form-label">Karbohidrat</label>
+                            <input type="text" class="form-control" id="karbohidrat" placeholder="Karbohidrat Apa Yang Kamu Makan Hari Ini?">
+                          </div>
+                          <div class="mb-3">
+                            <label for="ket_makan" class="form-label">Serat</label>
+                            <input type="text" class="form-control" id="serat" placeholder="Serat Apa Yang Kamu Makan Hari Ini?">
+                          </div>
+                          <div class="mb-3">
+                            <label for="ket_makan" class="form-label">Protein</label>
+                            <input type="text" class="form-control" id="protein" placeholder="Protein Apa Yang Kamu Makan Hari Ini?">
+                          </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -592,13 +610,13 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="keterangan_masyarakat" class="form-label">Keterangan Kegiatan</label>
-                            <textarea class="form-control" id="keterangan_masyarakat" name="keterangan" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-3">
                             <label for="foto_masyarakat" class="form-label">Upload Foto Kegiatan</label>
                             <input type="file" class="form-control" id="foto_masyarakat" name="image"
                                 accept="image/*" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="keterangan_masyarakat" class="form-label">Keterangan Kegiatan</label>
+                            <textarea class="form-control" id="keterangan_masyarakat" name="keterangan" rows="3" required placeholder="Kegiatan Apa Yang Di Lakukan Hari Ini?"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -622,10 +640,10 @@
                 <form action="{{ route('istirahat') }}" method="POST" id="form-Istirahat">
                     @csrf
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="waktu_istirahat" class="form-label">Waktu Istirahat</label>
-                            <input type="text" class="form-control" id="current-time" name="waktu" readonly>
+                        <div class="modal-body">
+                            <p id="time-display">Waktu saat ini: <span id="current-time"></span></p>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -649,7 +667,7 @@
 
 
 
-
+    {{-- card 7 kebiasaan --}}
 
     <div class="container">
         <h2 style="text-align: center;">7 KEBIASAAN ANAK</h2>
