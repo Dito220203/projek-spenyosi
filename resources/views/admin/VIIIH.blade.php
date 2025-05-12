@@ -9,7 +9,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h1>VII A</h1>
+                            <h1>VIII H</h1>
                             <div class="mb-3 d-flex justify-content-between align-items-center">
     <div>
         {{-- <a href="{{ route('recap.today') }}" class="btn btn-success mr-2">📅 Rekap Hari Ini</a> --}}

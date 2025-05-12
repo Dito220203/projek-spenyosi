@@ -1,19 +1,49 @@
 <?php
 
-use App\Http\Controllers\KebiasaananakController;
+use App\Http\Controllers\adminController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LoginAdminController;
 use App\Http\Controllers\walikelasController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\siswaController;
+use App\Http\Controllers\RekapController;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::get('/admin', function () {
-    return view('admin.index');
-});
-Route::get('/VIIA', function () {
-    return view('admin.VIIA');
-});
+Route::get('/loginadmin', [LoginAdminController::class, 'index'])->name('loginadmin');
+Route::post('/loginadmin', [LoginAdminController::class, 'authenticate'])->name('loginadmin.authenticate');
+
+Route::get('/admin', [adminController::class, 'index'])->name('admin.index');
+Route::get('/VIIA', [AdminController::class, 'VIIA']);
+Route::get('/VIIB', [AdminController::class, 'VIIB']);
+Route::get('/VIIC', [AdminController::class, 'VIIC']);
+Route::get('/VIID', [AdminController::class, 'VIID']);
+Route::get('/VIIE', [AdminController::class, 'VIIE']);
+Route::get('/VIIF', [AdminController::class, 'VIIF']);
+Route::get('/VIIG', [AdminController::class, 'VIIG']);
+Route::get('/VIIH', [AdminController::class, 'VIIH']);
+Route::get('/VIII', [AdminController::class, 'VIII']);
+// KELAS VIII
+Route::get('/VIIIA', [AdminController::class, 'VIIIA']);
+Route::get('/VIIIB', [AdminController::class, 'VIIIB']);
+Route::get('/VIIIC', [AdminController::class, 'VIIIC']);
+Route::get('/VIIID', [AdminController::class, 'VIIID']);
+Route::get('/VIIIE', [AdminController::class, 'VIIIE']);
+Route::get('/VIIIF', [AdminController::class, 'VIIIF']);
+Route::get('/VIIIG', [AdminController::class, 'VIIIG']);
+Route::get('/VIIIH', [AdminController::class, 'VIIIH']);
+Route::get('/VIIII', [AdminController::class, 'VIIII']);
+
+Route::get('/rekap', [RekapController::class, 'index'])->name('rekap.index');
+
+
+
+
+Route::get('/rekap/hari-ini', [AdminController::class, 'rekapHariIni'])->name('recap.today');
+Route::get('/rekap/bulan', [SiswaController::class, 'rekapBulan'])->name('recap.month');
+Route::get('/rekap/export-pdf', [AdminController::class, 'exportPdf'])->name('export.pdf');
+
+
 
 //loginSiswa
 Route::get('/', [LoginController::class, 'index'])->name('login');

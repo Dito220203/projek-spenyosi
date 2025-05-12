@@ -9,17 +9,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h1>VII A</h1>
-                            <div class="mb-3 d-flex justify-content-between align-items-center">
-    <div>
-        {{-- <a href="{{ route('recap.today') }}" class="btn btn-success mr-2">📅 Rekap Hari Ini</a> --}}
-        {{-- <a href="{{ route('recap.month') }}" class="btn btn-warning mr-2">🗓️ Rekap Bulan Ini</a> --}}
-    </div>
-    <div>
-        <a href="{{ route('export.pdf', request()->all()) }}" class="btn btn-danger">🖨️ Cetak PDF</a>
-    </div>
-</div>
-
+                            <h1>VII C</h1>
                             <form method="GET" action="{{ url()->current() }}" class="form-inline mb-3">
                                 <label class="mr-2">Tanggal:</label>
                                 <select name="tanggal" class="form-control mr-2">
@@ -53,7 +43,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama</th>
+                                        <th>Nama Siswa</th>
                                         <th>Bangun Pagi</th>
                                         <th>Beribadah</th>
                                         <th>Berolahraga</th>
