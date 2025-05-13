@@ -24,6 +24,9 @@ class Siswa extends Authenticatable
     public function beribadah():HasMany{
         return $this->hasMany(Beribadah::class,"id_siswa");
     }
+    public function beribadahkristen():HasMany{
+        return $this->hasMany(BeribadahKristen::class,"id_siswa");
+    }
     public function istirahat():HasMany{
         return $this->hasMany(Istirahat::class,"id_siswa");
     }

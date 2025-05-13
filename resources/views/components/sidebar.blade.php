@@ -166,14 +166,14 @@
                         </p>
                     </a>
                 </li> --}}
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="/rekap" class="nav-link">
                         <i class="fa-solid fa-book nav-icon"></i>
                         <p>
                             REKAP
                         </p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="/loginadmin" class="nav-link">
                         <i class="nav-icon fa-solid fa-right-from-bracket"></i>

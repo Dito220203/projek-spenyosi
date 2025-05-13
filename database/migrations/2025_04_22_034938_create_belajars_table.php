@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_siswa')->references("id")->on("siswas")->onDelete("cascade")->onUpdate("cascade");
             $table->string("image");
+            $table->text("ket_belajar");
             $table->timestamps();
         });
     }

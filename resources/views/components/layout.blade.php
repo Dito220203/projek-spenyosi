@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
-    
+
     {{-- <style>
           /* Membuat animasi teks berjalan terus-menerus dari kanan ke kiri */
         @keyframes slideLeft {
@@ -69,6 +69,8 @@
 
         {{ $slot }} --}}
     </div>
+
+
     <footer class="main-footer">
         <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
         All rights reserved.
@@ -82,6 +84,7 @@
         <!-- Control sidebar content goes here -->
     </aside>
     <!-- /.control-sidebar -->
+
 
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 

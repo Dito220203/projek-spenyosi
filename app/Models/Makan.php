@@ -10,7 +10,7 @@ class Makan extends Model
 {
     use HasFactory;
     protected $table = 'makans';
-    protected $fillable = ['id_siswa','image','keterangan'];
+    protected $fillable = ['id_siswa','image','karbohidrat','serat','protein'];
 
     public function siswa():BelongsTo{
         return $this->belongsTo(Siswa::class,'id_siswa');
