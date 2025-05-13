@@ -13,10 +13,13 @@
                             <div class="mb-3 d-flex justify-content-between align-items-center">
     <div>
         {{-- <a href="{{ route('recap.today') }}" class="btn btn-success mr-2">📅 Rekap Hari Ini</a> --}}
-        {{-- <a href="{{ route('recap.month') }}" class="btn btn-warning mr-2">🗓️ Rekap Bulan Ini</a> --}}
+        {{-- <a href="" class="btn btn-warning mr-2">🗓️ Rekap Bulan Ini</a> --}}
     </div>
     <div>
         <a href="{{ route('export.pdf', request()->all()) }}" class="btn btn-danger">🖨️ Cetak PDF</a>
+<a href="{{ route('export.excel', request()->all()) }}" class="btn btn-success">📤 Export Excel</a>
+
+
     </div>
 </div>
 

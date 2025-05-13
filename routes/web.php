@@ -34,7 +34,11 @@ Route::get('/VIIIG', [AdminController::class, 'VIIIG']);
 Route::get('/VIIIH', [AdminController::class, 'VIIIH']);
 Route::get('/VIIII', [AdminController::class, 'VIIII']);
 
-Route::get('/rekap', [RekapController::class, 'index'])->name('rekap.index');
+
+Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
+
+
+
 
 
 
@@ -55,6 +59,8 @@ Route::middleware(['auth:siswa'])->group(function (){
     Route::post('/bangun-pagi', [siswaController::class, 'bgnPagi'])->name('bangunpagi');
     Route::post('/masyarakat', [siswaController::class, 'Masyarakat'])->name('masyarakat');
     Route::post('/beribadah', [siswaController::class, 'Beribadah'])->name('beribadah');
+    Route::post('/beribadah-kristen', [siswaController::class, 'BeribadahKristen'])->name('beribadahkristen');
+
     Route::post('/olahraga', [siswaController::class, 'Olahraga'])->name('olahraga');
     Route::post('/belajar', [siswaController::class, 'Belajar'])->name('belajar');
     Route::post('/makan', [siswaController::class, 'Makan'])->name('makan');

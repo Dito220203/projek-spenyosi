@@ -10,7 +10,7 @@ class Olahraga extends Model
 {
     use HasFactory;
     protected $table = 'olahragas';
-    protected $fillable = ['id_siswa','image','waktu'];
+    protected $fillable = ['id_siswa','image','waktu','ket_olahraga'];
 
     public function siswa():BelongsTo{
         return $this->belongsTo(Siswa::class,'id_siswa');

@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\BangunPagi;
 use App\Models\Belajar;
 use App\Models\Beribadah;
+use App\Models\BeribadahKristen;
 use App\Models\Istirahat;
 use App\Models\Makan;
 use App\Models\Masyarakat;
 use App\Models\Olahraga;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SiswaBulananExport;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -87,12 +90,42 @@ class siswaController extends Controller
 
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
     }
+    public function BeribadahKristen(Request $request)
+    {
+        $waktuSekarang = Carbon::now();
+
+        $data = [
+            'doa_pagi' => $request->doa_pagi,
+            'alkitab' => $request->alkitab,
+            'doa_malam' => $request->doa_malam
+        ];
+
+        $existing = BeribadahKristen::where('id_siswa', $this->siswa->id)
+            ->whereDate('created_at', $waktuSekarang->toDateString())
+            ->first();
+
+        if ($existing) {
+            foreach ($data as $key => $value) {
+                if (!empty($value)) {
+                    $existing->$key = $value;
+                }
+            }
+            $existing->save();
+        } else {
+            $data['id_siswa'] = $this->siswa->id;
+            BeribadahKristen::create($data);
+        }
+
+        return redirect('/siswa')->with('success', 'Data ibadah Kristen berhasil disimpan!');
+    }
+
 
     public function Olahraga(Request $request)
     {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'waktu' => 'required|string|max:255'
+            'waktu' => 'required|string|max:255',
+            'ket_olahraga' => 'required|string|max:255'
         ]);
 
         $idSiswa = $this->siswa->id;
@@ -107,13 +140,15 @@ class siswaController extends Controller
         if ($olahraga) {
             $olahraga->update([
                 'image' => $path,
-                'waktu' => $request->waktu
+                'waktu' => $request->waktu,
+                'ket_olahraga' => $request->ket_olahraga
             ]);
         } else {
             Olahraga::create([
                 'id_siswa' => $idSiswa,
                 'image' => $path,
-                'waktu' => $request->waktu
+                'waktu' => $request->waktu,
+                'ket_olahraga' => $request->ket_olahraga
             ]);
         }
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
@@ -124,6 +159,7 @@ class siswaController extends Controller
     {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'ket_belajar' => 'required|string|max:255'
         ]);
 
         $idSiswa = $this->siswa->id;
@@ -138,11 +174,13 @@ class siswaController extends Controller
         if ($belajar) {
             $belajar->update([
                 'image' => $path,
+                'ket_belajar' => $request->ket_belajar
             ]);
         } else {
             Belajar::create([
                 'id_siswa' => $idSiswa,
                 'image' => $path,
+                'ket_belajar' => $request->ket_belajar
             ]);
         }
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
@@ -152,7 +190,9 @@ class siswaController extends Controller
     {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'keterangan' => 'required|string|max:255',
+            'karbohidrat' => 'required|string|max:255',
+            'serat' => 'required|string|max:255',
+            'protein' => 'required|string|max:255',
         ]);
 
         $idSiswa = $this->siswa->id;
@@ -167,13 +207,17 @@ class siswaController extends Controller
         if ($makan) {
             $makan->update([
                 'image' => $path,
-                'keterangan' => $request->keterangan,
+                'karbohidrat' => $request->karbohidrat,
+                'serat' => $request->serat,
+                'protein' => $request->protein
             ]);
         } else {
             Makan::create([
                 'id_siswa' => $idSiswa,
                 'image' => $path,
-                'keterangan' => $request->keterangan,
+                'karbohidrat' => $request->karbohidrat,
+                'serat' => $request->serat,
+                'protein' => $request->protein
             ]);
         }
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
@@ -250,4 +294,18 @@ class siswaController extends Controller
 
         return response()->json($status);
     }
+
+    // rekap
+    public function exportExcel(Request $request)
+{
+       $kelas = $request->kelas;
+    $bulan = $request->bulan;
+    $tahun = $request->tahun;
+
+    return Excel::download(
+        new SiswaBulananExport($kelas, $bulan, $tahun),
+        'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
+    );
+}
+
 }

@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_siswa')->references("id")->on("siswas")->onDelete("cascade")->onUpdate("cascade");
             $table->string('image');
-            $table->text('keterangan');
+            $table->text('karbohidrat');
+            $table->text('serat');
+            $table->text('protein');
             $table->timestamps();
         });
     }
