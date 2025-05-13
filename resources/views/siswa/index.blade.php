@@ -285,6 +285,7 @@
             const kebiasaan = [
                 'Bangun Pagi',
                 'Beribadah',
+                'BeribadahKristen',
                 'Berolahraga',
                 'Gemar Belajar',
                 'Makan Sehat & Bergizi',

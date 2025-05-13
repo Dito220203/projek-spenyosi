@@ -285,6 +285,7 @@ class siswaController extends Controller
         $status = [
             'Bangun Pagi' => BangunPagi::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
             'Beribadah' => Beribadah::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
+            'BeribadahKristen' => BeribadahKristen::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
             'Berolahraga' => Olahraga::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
             'Gemar Belajar' => Belajar::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
             'Makan Sehat & Bergizi' => Makan::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
@@ -296,16 +297,16 @@ class siswaController extends Controller
     }
 
     // rekap
-    public function exportExcel(Request $request)
-{
-       $kelas = $request->kelas;
-    $bulan = $request->bulan;
-    $tahun = $request->tahun;
+//     public function exportExcel(Request $request)
+// {
+//        $kelas = $request->kelas;
+//     $bulan = $request->bulan;
+//     $tahun = $request->tahun;
 
-    return Excel::download(
-        new SiswaBulananExport($kelas, $bulan, $tahun),
-        'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
-    );
-}
+//     return Excel::download(
+//         new SiswaBulananExport($kelas, $bulan, $tahun),
+//         'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
+//     );
+// }
 
 }
