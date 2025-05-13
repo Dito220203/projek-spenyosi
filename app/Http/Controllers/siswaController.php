@@ -210,11 +210,11 @@ class siswaController extends Controller
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
     }
 
-    public function Istirahat(Request $request)
+    public function istirahat(Request $request)
     {
         $waktuSekarang = Carbon::now();
 
-        $istirahat = Istirahat::where('id_siswa', $this->siswa->id)
+        $istirahat = istirahat::where('id_siswa', $this->siswa->id)
             ->whereDate('created_at', $waktuSekarang->toDateString())
             ->first();
 
@@ -223,12 +223,13 @@ class siswaController extends Controller
                 'waktu' => $request->waktu
             ]);
         } else {
-            Istirahat::create([
+            istirahat::create([
                 'id_siswa' => $this->siswa->id,
                 'waktu' => $request->waktu
             ]);
         }
-        return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
+
+        return response()->json(["success" => true]);
     }
 
 

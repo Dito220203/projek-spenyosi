@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
 
     <title>7 Kebiasaan Anak</title>
@@ -372,152 +374,146 @@
 
 
     <!-- Modal Beribadah -->
-        <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Beribadah</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
-                            @csrf
-                            <label>Beribadah</label>
-                            <div>
-                                <label><input type="checkbox" class="salat-checkbox" value="subuh"> Subuh</label>
-                                <input type="time" class="salat-time form-control mt-1" name="subuh" readonly
-                                    hidden>
-                            </div>
-                            <div>
-                                <label><input type="checkbox" class="salat-checkbox" value="dzuhur"> Dzuhur</label>
-                                <input type="time" class="salat-time form-control mt-1" name="duhur" readonly
-                                    hidden>
-                            </div>
-                            <div>
-                                <label><input type="checkbox" class="salat-checkbox" value="ashar"> Ashar</label>
-                                <input type="time" class="salat-time form-control mt-1" name="asar" readonly
-                                    hidden>
-                            </div>
-                            <div>
-                                <label><input type="checkbox" class="salat-checkbox" value="maghrib"> Maghrib</label>
-                                <input type="time" class="salat-time form-control mt-1" name="magrib" readonly
-                                    hidden>
-                            </div>
-                            <div>
-                                <label><input type="checkbox" class="salat-checkbox" value="isya"> Isya</label>
-                                <input type="time" class="salat-time form-control mt-1" name="isyak" readonly
-                                    hidden>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
-                    </div>
+    <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Beribadah</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
+                        @csrf
+                        <label>Beribadah</label>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="subuh"> Subuh</label>
+                            <input type="time" class="salat-time form-control mt-1" name="subuh" readonly hidden>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="dzuhur"> Dzuhur</label>
+                            <input type="time" class="salat-time form-control mt-1" name="duhur" readonly hidden>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="ashar"> Ashar</label>
+                            <input type="time" class="salat-time form-control mt-1" name="asar" readonly hidden>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="maghrib"> Maghrib</label>
+                            <input type="time" class="salat-time form-control mt-1" name="magrib" readonly hidden>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="isya"> Isya</label>
+                            <input type="time" class="salat-time form-control mt-1" name="isyak" readonly hidden>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const checkboxes = document.querySelectorAll('.salat-checkbox');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.salat-checkbox');
 
-                // Hari sekarang (format: YYYY-MM-DD)
-                const today = new Date().toISOString().split('T')[0];
+            // Hari sekarang (format: YYYY-MM-DD)
+            const today = new Date().toISOString().split('T')[0];
 
-                // Cek localStorage dan isi ulang checkbox + waktu
-                checkboxes.forEach(function(checkbox) {
-                    const value = checkbox.value;
-                    const timeInput = checkbox.closest('div').querySelector('.salat-time');
-                    const dataKey = `salat_${value}`;
+            // Cek localStorage dan isi ulang checkbox + waktu
+            checkboxes.forEach(function(checkbox) {
+                const value = checkbox.value;
+                const timeInput = checkbox.closest('div').querySelector('.salat-time');
+                const dataKey = `salat_${value}`;
 
-                    const saved = localStorage.getItem(dataKey);
-                    if (saved) {
-                        const parsed = JSON.parse(saved);
-                        if (parsed.date === today) {
-                            checkbox.checked = true;
-                            timeInput.value = parsed.time;
-                            timeInput.style.display = 'block';
-                        } else {
-                            // Hapus data jika sudah lewat hari
-                            localStorage.removeItem(dataKey);
-                        }
+                const saved = localStorage.getItem(dataKey);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.date === today) {
+                        checkbox.checked = true;
+                        timeInput.value = parsed.time;
+                        timeInput.style.display = 'block';
+                    } else {
+                        // Hapus data jika sudah lewat hari
+                        localStorage.removeItem(dataKey);
                     }
+                }
 
-                    checkbox.addEventListener('change', function() {
-                        if (checkbox.checked) {
-                            const now = new Date();
-                            const jam = now.getHours().toString().padStart(2, '0');
-                            const menit = now.getMinutes().toString().padStart(2, '0');
-                            const waktu = `${jam}:${menit}`;
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        const now = new Date();
+                        const jam = now.getHours().toString().padStart(2, '0');
+                        const menit = now.getMinutes().toString().padStart(2, '0');
+                        const waktu = `${jam}:${menit}`;
 
-                            timeInput.value = waktu;
-                            timeInput.style.display = 'block';
+                        timeInput.value = waktu;
+                        timeInput.style.display = 'block';
 
-                            // Simpan ke localStorage
-                            localStorage.setItem(dataKey, JSON.stringify({
-                                time: waktu,
-                                date: today
-                            }));
-                        } else {
-                            timeInput.value = '';
-                            timeInput.style.display = 'none';
-                            localStorage.removeItem(dataKey);
-                        }
-                    });
+                        // Simpan ke localStorage
+                        localStorage.setItem(dataKey, JSON.stringify({
+                            time: waktu,
+                            date: today
+                        }));
+                    } else {
+                        timeInput.value = '';
+                        timeInput.style.display = 'none';
+                        localStorage.removeItem(dataKey);
+                    }
                 });
             });
-        </script>
+        });
+    </script>
 
-        <!-- Modal Beribadah (Kristen - Sederhana) -->
-        <div class="modal fade" id="modalKristen" tabindex="-1"
-            aria-labelledby="exampleModalBeribadahLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Ibadah Harian</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
-                            @csrf
+    <!-- Modal Beribadah (Kristen - Sederhana) -->
+    <div class="modal fade" id="modalKristen" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Ibadah Harian</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
+                        @csrf
 
-                            <div>
-                                <label><input type="checkbox" name="doa_pagi"> Doa Pagi</label>
-                            </div>
-                            <div>
-                                <label><input type="checkbox" name="alkitab"> Membaca Alkitab / Renungan</label>
-                            </div>
-                            <div>
-                                <label><input type="checkbox" name="doa_malam"> Doa Malam</label>
-                            </div>
+                        <div>
+                            <label><input type="checkbox" name="doa_pagi"> Doa Pagi</label>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" name="alkitab"> Membaca Alkitab / Renungan</label>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" name="doa_malam"> Doa Malam</label>
+                        </div>
 
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
-                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>
-<script>
-    $(document).ready(function() {
-        $('#btn-beribadah').click(function() {
-            let agama = "{{ auth()->user()->agama }}";
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#btn-beribadah').click(function() {
+                let agama = "{{ auth()->user()->agama }}";
 
-            if (agama === 'Islam') {
-                $('#modalIslam').modal('show');
-            } else if (agama === 'Kristen') {
-                $('#modalKristen').modal('show');
-            } else {
-                alert('Agama tidak dikenali');
-            }
+                if (agama === 'Islam') {
+                    $('#modalIslam').modal('show');
+                } else if (agama === 'Kristen') {
+                    $('#modalKristen').modal('show');
+                } else {
+                    alert('Agama tidak dikenali');
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 
 
@@ -540,8 +536,8 @@
                             <input type="file" class="form-control" id="foto_masyarakat" name="image"
                                 accept="image/*" required>
                         </div>
-                        
-                      {{-- Waktu Otomatis --}}
+
+                        {{-- Waktu Otomatis --}}
                         <div class="mb-3">
                             <label for="waktu_olahraga_display" class="form-label">Waktu Upload</label>
                             <input type="text" class="form-control" id="waktu_olahraga_display" readonly>
@@ -549,7 +545,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="ket_olahraga" class="form-label">Jenis Olahraga</label>
-                            <textarea class="form-control" id="ket_olahraga" name="ket_olahraga" rows="2" required placeholder="Olahraga Apa Kamu Hari Ini ?"></textarea>
+                            <textarea class="form-control" id="ket_olahraga" name="ket_olahraga" rows="2" required
+                                placeholder="Olahraga Apa Kamu Hari Ini ?"></textarea>
                         </div>
 
                         <div class="modal-footer">
@@ -603,7 +600,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="ket_belajar" class="form-label">Belajar Apa Aku Hari ini</label>
-                                <textarea class="form-control" id="ket_belajar" name="ket_belajar" rows="2" required placeholder="Masih Ingat Belajar Apa Hari Ini?"></textarea>
+                                <textarea class="form-control" id="ket_belajar" name="ket_belajar" rows="2" required
+                                    placeholder="Masih Ingat Belajar Apa Hari Ini?"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -635,16 +633,19 @@
                         </div>
                         <div class="mb-3">
                             <label for="ket_makan" class="form-label">Karbohidrat</label>
-                            <input type="text" class="form-control" id="karbohidrat" placeholder="Karbohidrat Apa Yang Kamu Makan Hari Ini?">
-                          </div>
-                          <div class="mb-3">
+                            <input type="text" class="form-control" id="karbohidrat"
+                                placeholder="Karbohidrat Apa Yang Kamu Makan Hari Ini?">
+                        </div>
+                        <div class="mb-3">
                             <label for="ket_makan" class="form-label">Serat</label>
-                            <input type="text" class="form-control" id="serat" placeholder="Serat Apa Yang Kamu Makan Hari Ini?">
-                          </div>
-                          <div class="mb-3">
+                            <input type="text" class="form-control" id="serat"
+                                placeholder="Serat Apa Yang Kamu Makan Hari Ini?">
+                        </div>
+                        <div class="mb-3">
                             <label for="ket_makan" class="form-label">Protein</label>
-                            <input type="text" class="form-control" id="protein" placeholder="Protein Apa Yang Kamu Makan Hari Ini?">
-                          </div>
+                            <input type="text" class="form-control" id="protein"
+                                placeholder="Protein Apa Yang Kamu Makan Hari Ini?">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -675,7 +676,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="keterangan_masyarakat" class="form-label">Keterangan Kegiatan</label>
-                            <textarea class="form-control" id="keterangan_masyarakat" name="keterangan" rows="3" required placeholder="Kegiatan Apa Yang Di Lakukan Hari Ini?"></textarea>
+                            <textarea class="form-control" id="keterangan_masyarakat" name="keterangan" rows="3" required
+                                placeholder="Kegiatan Apa Yang Di Lakukan Hari Ini?"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -691,13 +693,16 @@
     <div class="modal fade" id="exampleModalIstirahat" tabindex="-1" aria-labelledby="exampleModalIstirahatLabel"
         aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalIstirahatLabel">Input Data Waktu Istirahat</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('istirahat') }}" method="POST" id="form-Istirahat">
-                    @csrf
+
+
+            <form action="{{ route('istirahat') }}" method="POST" id="form-Istirahat">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalIstirahatLabel">Input Data Waktu Istirahat</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                     <div class="modal-body">
                         <div class="modal-body">
                             <p id="time-display">Waktu saat ini: <span id="current-time"></span></p>
@@ -708,13 +713,14 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
+
         </div>
     </div>
 
     {{-- Script untuk isi otomatis jam saat ini ketika modal dibuka --}}
-    <script>
+    {{-- <script>
         const modalIstirahat = document.getElementById('exampleModalIstirahat');
         modalIstirahat.addEventListener('shown.bs.modal', function() {
             const now = new Date();
@@ -722,7 +728,7 @@
             const menit = now.getMinutes().toString().padStart(2, '0');
             document.getElementById('current-time').value = `${jam}:${menit}`;
         });
-    </script>
+    </script> --}}
 
 
 

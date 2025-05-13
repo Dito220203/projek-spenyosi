@@ -14,6 +14,7 @@ class Siswa extends Authenticatable
     use HasFactory, Notifiable;
     protected $table =  'siswas';
     protected $fillable = ['nisn','nama','kelas','agama','password'];
+    protected $with=["bangunpagi","belajar","beribadah","istirahat","makan","masyarakat","olahraga"];
 
     public function bangunpagi():HasMany{
         return $this->hasMany(BangunPagi::class,"id_siswa");
