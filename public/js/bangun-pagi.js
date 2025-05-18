@@ -104,6 +104,11 @@ $(document).ready( function () {
 
             success: function(res){
                 window.location.href = '/siswa';
+                Swal.fire({
+  title: "Drag me!",
+  icon: "success",
+  draggable: true
+});
             }
 
         })

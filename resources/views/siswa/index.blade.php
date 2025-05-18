@@ -491,15 +491,15 @@
 
                     <div>
                          <label><input type="checkbox" class="ibadah-checkbox" value="doa_pagi"> Doa Pagi</label>
-                            <input type="time" class="ibadah-time form-control mt-1" name="doa_pagi" readonly hidden>
+                            <input type="time" class="ibadah-time form-control mt-1" name="subuh" readonly hidden>
                     </div>
                     <div>
                          <label><input type="checkbox" class="ibadah-checkbox" value="alkitab"> Membaca Alkitab/Renungan</label>
-                            <input type="time" class="ibadah-time form-control mt-1" name="alkitab" readonly hidden>
+                            <input type="time" class="ibadah-time form-control mt-1" name="asar" readonly hidden>
                     </div>
                     <div>
                         <label><input type="checkbox" class="ibadah-checkbox" value="doa_malam"> Doa Malam</label>
-                            <input type="time" class="ibadah-time form-control mt-1" name="doa_malam" readonly hidden>
+                            <input type="time" class="ibadah-time form-control mt-1" name="isyak" readonly hidden>
                     </div>
 
                 </form>

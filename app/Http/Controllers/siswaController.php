@@ -95,9 +95,9 @@ class siswaController extends Controller
         $waktuSekarang = Carbon::now();
 
         $data = [
-            'doa_pagi' => $request->doa_pagi,
-            'alkitab' => $request->alkitab,
-            'doa_malam' => $request->doa_malam
+            'subuh' => $request->subuh,
+            'asar' => $request->asar,
+            'isyak' => $request->isyak
         ];
 
         $existing = BeribadahKristen::where('id_siswa', $this->siswa->id)

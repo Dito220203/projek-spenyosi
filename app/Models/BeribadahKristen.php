@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class BeribadahKristen extends Model
 {
     use HasFactory;
-    protected $table = 'beribadah_kristens';
-    protected $fillable = ['id_siswa','doa_pagi', 'alkitab', 'doa_malam'];
+    protected $table = 'beribadahs';
+    protected $fillable = ['id_siswa','subuh', 'asar', 'isyak'];
 
     public function siswa(): BelongsTo
     {
