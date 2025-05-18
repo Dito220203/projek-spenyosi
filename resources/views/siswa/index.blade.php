@@ -705,6 +705,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             <input type="text" class="form-control" id="protein" name="protein"
                                 placeholder="Protein Apa Yang Kamu Makan Hari Ini?" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="ket_makan" class="form-label">Susu</label>
+                            <input type="text" class="form-control" id="cairan" name="minum"
+                                placeholder="Protein Apa Yang Kamu Makan Hari Ini?" required>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -759,11 +764,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <form action="{{ route('istirahat') }}" method="post" id="form-istirahat">
                     @csrf
+                    {{-- <div style="text-align: center;">
+                        <p>Waktu saat ini</p>
+                        <span id="current-time"
+                            style="display: block; font-size: 1.9em; font-weight: bold; margin-top: 5px;">
+                            22:11:44
+                        </span>
+                    </div> --}}
                     <div class="modal-body text-center">
                         <p>Silakan beristirahat sejenak. Waktu saat ini:</p>
                         <h2 id="jamSekarang" class="fw-bold text-dark">--:--:--</h2>
                         <input type="hidden" name="waktu" id="inputJamIstirahat">
                     </div>
+
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>

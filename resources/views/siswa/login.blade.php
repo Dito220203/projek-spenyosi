@@ -109,7 +109,7 @@
     <div class="login-container">
         <img src="{{ asset('img/logo.png') }}" alt="Logo">
         <div class="alert alert-danger mt-3" style="font-size: 14px;">
-            Masukkan Username dan Password<br>(Menggunakan NISN & password)
+            Masukkan Username dan Password<br>(Menggunakan Nis & Password)
         </div>
         {{-- <h1>Login</h1> --}}
         @if ($errors->any())
@@ -124,7 +124,7 @@
             <ul>
                 <li>
                     <label for="username">Username:</label>
-                    <input type="text" name="nisn" id="username">
+                    <input type="text" name="nis" id="username">
                 </li>
                 <li>
                     <label for="password">Password:</label>

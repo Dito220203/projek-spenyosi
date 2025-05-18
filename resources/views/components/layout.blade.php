@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {{-- <style>
           /* Membuat animasi teks berjalan terus-menerus dari kanan ke kiri */
@@ -85,6 +86,17 @@
     </aside>
     <!-- /.control-sidebar -->
 
+    @if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        timer: 3000,
+        showConfirmButton: false
+    });
+</script>
+@endif
 
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 

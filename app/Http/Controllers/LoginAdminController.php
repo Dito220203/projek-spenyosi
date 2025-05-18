@@ -16,11 +16,11 @@ public function index() {
     public function authenticate(Request $request)
     {
          $request->validate([
-            'nisn' => ['required'],
+            'nis' => ['required'],
             'password' => ['required'],
         ]);
 
-        $credentials = $request->only('nisn','password');
+        $credentials = $request->only('nis','password');
         if (Auth::guard('siswa')->attempt($credentials)) {
             $request->session()->regenerate();
 

@@ -3,7 +3,7 @@
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LoginAdminController;
-use App\Http\Controllers\walikelasController;
+use App\Http\Controllers\DataSiswaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\siswaController;
 use App\Http\Controllers\RekapController;
@@ -33,6 +33,14 @@ Route::get('/VIIIF', [AdminController::class, 'VIIIF']);
 Route::get('/VIIIG', [AdminController::class, 'VIIIG']);
 Route::get('/VIIIH', [AdminController::class, 'VIIIH']);
 Route::get('/VIIII', [AdminController::class, 'VIIII']);
+
+Route::get('/Datasiswa', [DataSiswaController::class, 'index']);
+Route::post('/Datasiswa', [DataSiswaController::class, 'store'])->name('siswa.store');
+Route::put('/Datasiswa/{id}', [DataSiswaController::class, 'update'])->name('siswa.update');
+
+
+Route::post('/import-siswa', [DataSiswaController::class, 'import'])->name('siswa.import');
+
 
 
 Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
@@ -72,8 +80,3 @@ Route::middleware(['auth:siswa'])->group(function (){
 });
 
 
-
-
-//walikelas
-
-Route::get('/walikelas',[walikelasController::class,'index'])->name('walikelas');

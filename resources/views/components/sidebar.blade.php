@@ -158,14 +158,14 @@
                       </ul>
                 </li>
 
-                {{-- <li class="nav-item">
-                    <a href="tambahsiswa" class="nav-link">
+                <li class="nav-item">
+                    <a href="Datasiswa" class="nav-link">
                         <i class="fa-solid fa-user-plus nav-icon"></i>
                         <p>
-                            TAMBAH SISWA
+                            DATA SISWA
                         </p>
                     </a>
-                </li> --}}
+                </li>
                 {{-- <li class="nav-item">
                     <a href="/rekap" class="nav-link">
                         <i class="fa-solid fa-book nav-icon"></i>

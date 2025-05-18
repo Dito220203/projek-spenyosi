@@ -13,7 +13,7 @@ class Siswa extends Authenticatable
 {
     use HasFactory, Notifiable;
     protected $table =  'siswas';
-    protected $fillable = ['nisn','nama','kelas','agama','password'];
+    protected $fillable = ['nis','nama','kelas','agama','password'];
     protected $with=["bangunpagi","belajar","beribadah","istirahat","makan","masyarakat","olahraga"];
 
     public function bangunpagi():HasMany{

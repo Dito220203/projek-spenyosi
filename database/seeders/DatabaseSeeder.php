@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
        Siswa::create([
-        'nisn'=>'123',
+        'nis'=>'123',
         'nama'=>'dito',
         'kelas'=>'VIIA',
         'agama'=>'Islam',
@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
        ]);
 
        Siswa::create([
-        'nisn'=>'1234',
+        'nis'=>'1234',
         'nama'=>'farhan',
         'kelas'=>'VIIB',
         'agama'=>'Islam',
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
        ]);
 
        Siswa::create([
-        'nisn'=>'12345',
+        'nis'=>'12345',
         'nama'=>'ditos',
         'kelas'=>'VIIC',
         'agama'=>'Kristen',
@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
        ]);
 
        Siswa::create([
-        'nisn'=>'123456',
+        'nis'=>'123456',
         'nama'=>'afni',
         'kelas'=>'VIID',
         'agama'=>'Islam',
