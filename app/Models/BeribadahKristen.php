@@ -9,7 +9,7 @@ class BeribadahKristen extends Model
 {
     use HasFactory;
     protected $table = 'beribadahs';
-    protected $fillable = ['id_siswa','subuh', 'asar', 'isyak'];
+    protected $fillable = ['subuh', 'asar', 'isyak'];
 
     public function siswa(): BelongsTo
     {

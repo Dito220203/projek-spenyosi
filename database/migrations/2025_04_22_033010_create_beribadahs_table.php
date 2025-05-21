@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('beribadahs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_siswa')->references("id")->on("siswas")->onDelete("cascade")->onUpdate("cascade");
             $table->time("subuh")->nullable();
             $table->time("duhur")->nullable();
             $table->time("asar")->nullable();

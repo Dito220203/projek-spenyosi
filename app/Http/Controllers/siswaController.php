@@ -12,6 +12,8 @@ use App\Models\Masyarakat;
 use App\Models\Olahraga;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SiswaBulananExport;
+use App\Models\RekapAbsensi;
+use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,37 +24,42 @@ class siswaController extends Controller
      * Display a listing of the resource.
      */
     protected $siswa;
+    protected $waktuSekarang;
+    protected $rekap;
     public function __construct()
     {
         $this->siswa = Auth::guard('siswa')->user();
+        $this->waktuSekarang = Carbon::now();
+        $this->rekap = RekapAbsensi::where('id_siswa', $this->siswa->id)
+            ->whereDate('created_at', $this->waktuSekarang->toDateString())
+            ->first();
     }
 
 
     public function index()
     {
+        $rekapHari = Siswa::whereHas('rekapabsensi', function ($q) {
+            $q->where('id_siswa', $this->siswa->rekapabsensi->id);
+        })->whereDate('created_at', $this->waktuSekarang)->first();
+        return view('siswa.index', ['siswa' => $this->siswa, 'rekaps' => $rekapHari]);
 
-        return view('siswa.index', ['siswa' => $this->siswa]);
+
     }
 
 
 
     public function bgnPagi(Request $request)
     {
-        $waktuSekarang = Carbon::now();
 
-        $bgnPagi = BangunPagi::where('id_siswa', $this->siswa->id)
-            ->whereDate('created_at', $waktuSekarang->toDateString())
-            ->first();
-
-        if ($bgnPagi) {
-            $bgnPagi->update([
+        if ($this->rekap && $this->rekap->id_bangun_pagi) {
+            $bgnPagi = BangunPagi::where('id', $this->rekap->id_bangun_pagi)->update([
                 'waktu' => $request->waktu
             ]);
         } else {
-            BangunPagi::create([
-                'id_siswa' => $this->siswa->id,
+            $bgnPagi =  BangunPagi::create([
                 'waktu' => $request->waktu
             ]);
+            $this->simpanKebiasaan('id_bangun_pagi', $bgnPagi->id);
         }
 
         return response()->json(["success" => true]);
@@ -60,8 +67,6 @@ class siswaController extends Controller
 
     public function Beribadah(Request $request)
     {
-        $waktuSekarang = Carbon::now();
-
         $data = [
             'subuh' => $request->subuh,
             'duhur' => $request->duhur,
@@ -71,52 +76,27 @@ class siswaController extends Controller
         ];
 
 
-        $existing = Beribadah::where('id_siswa', $this->siswa->id)
-            ->whereDate('created_at', $waktuSekarang->toDateString())
-            ->first();
-
-        if ($existing) {
+        if ($this->rekap && $this->rekap->id_beribadah) {
             // Update hanya field yang tidak null
-            foreach ($data as $key => $value) {
-                if (!empty($value)) {
-                    $existing->$key = $value;
-                }
+
+            if ($this->siswa->agama == 'Islam') {
+                $beribadah = Beribadah::where('id', $this->rekap->id_beribadah)->update($data);
+            } else {
+                $beribadah = Beribadah::where('id', $this->rekap->id_beribadah)->update([
+                    'subuh' => $request->subuh,
+                    'asar' => $request->asar,
+                    'isyak' => $request->isyak
+                ]);
             }
-            $existing->save();
         } else {
             $data['id_siswa'] = $this->siswa->id;
-            Beribadah::create($data);
+            $beribadah =  Beribadah::create($data);
+            $this->simpanKebiasaan('id_beribadah', $beribadah->id);
         }
+
+
 
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
-    }
-    public function BeribadahKristen(Request $request)
-    {
-        $waktuSekarang = Carbon::now();
-
-        $data = [
-            'subuh' => $request->subuh,
-            'asar' => $request->asar,
-            'isyak' => $request->isyak
-        ];
-
-        $existing = BeribadahKristen::where('id_siswa', $this->siswa->id)
-            ->whereDate('created_at', $waktuSekarang->toDateString())
-            ->first();
-
-        if ($existing) {
-            foreach ($data as $key => $value) {
-                if (!empty($value)) {
-                    $existing->$key = $value;
-                }
-            }
-            $existing->save();
-        } else {
-            $data['id_siswa'] = $this->siswa->id;
-            BeribadahKristen::create($data);
-        }
-
-        return redirect('/siswa')->with('success', 'Data ibadah Kristen berhasil disimpan!');
     }
 
 
@@ -128,29 +108,24 @@ class siswaController extends Controller
             'ket_olahraga' => 'required|string|max:255'
         ]);
 
-        $idSiswa = $this->siswa->id;
-        $tanggalHariIni = Carbon::now()->toDateString();
         $path = $request->file('image')->store('olahraga', 'public');
 
-
-        $olahraga = Olahraga::where('id_siswa', $idSiswa)
-            ->whereDate('created_at', $tanggalHariIni)
-            ->first();
-
-        if ($olahraga) {
-            $olahraga->update([
+        if ($this->rekap && $this->rekap->id_olahraga) {
+            $olahraga = Olahraga::where('id', $this->rekap->id_olahraga)->update([
                 'image' => $path,
                 'waktu' => $request->waktu,
                 'ket_olahraga' => $request->ket_olahraga
             ]);
         } else {
-            Olahraga::create([
-                'id_siswa' => $idSiswa,
+            $olahraga =   Olahraga::create([
                 'image' => $path,
                 'waktu' => $request->waktu,
                 'ket_olahraga' => $request->ket_olahraga
             ]);
+            $this->simpanKebiasaan('id_olahraga', $olahraga->id);
         }
+
+
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
     }
 
@@ -161,28 +136,23 @@ class siswaController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'ket_belajar' => 'required|string|max:255'
         ]);
-
-        $idSiswa = $this->siswa->id;
-        $tanggalHariIni = Carbon::now()->toDateString();
         $path = $request->file('image')->store('belajar', 'public');
 
 
-        $belajar = Belajar::where('id_siswa', $idSiswa)
-            ->whereDate('created_at', $tanggalHariIni)
-            ->first();
 
-        if ($belajar) {
-            $belajar->update([
+        if ($this->rekap && $this->rekap->id_belajar) {
+            $belajar = Belajar::where('id', $this->rekap->id_belajar)->update([
                 'image' => $path,
                 'ket_belajar' => $request->ket_belajar
             ]);
         } else {
-            Belajar::create([
-                'id_siswa' => $idSiswa,
+            $belajar =  Belajar::create([
                 'image' => $path,
                 'ket_belajar' => $request->ket_belajar
             ]);
+            $this->simpanKebiasaan('id_belajar', $belajar->id);
         }
+
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
     }
 
@@ -195,31 +165,25 @@ class siswaController extends Controller
             'protein' => 'required|string|max:255',
         ]);
 
-        $idSiswa = $this->siswa->id;
-        $tanggalHariIni = Carbon::now()->toDateString();
-        $path = $request->file('image')->store('makan', 'public');
+        $path = $request->file('image')->store('makan', 'public');;
 
-
-        $makan = Makan::where('id_siswa', $idSiswa)
-            ->whereDate('created_at', $tanggalHariIni)
-            ->first();
-
-        if ($makan) {
-            $makan->update([
+        if ($this->rekap && $this->rekap->id_makan) {
+            $makan = Makan::where('id', $this->rekap->id_belajar)->update([
                 'image' => $path,
                 'karbohidrat' => $request->karbohidrat,
                 'serat' => $request->serat,
                 'protein' => $request->protein
             ]);
         } else {
-            Makan::create([
-                'id_siswa' => $idSiswa,
+            $makan =  Makan::create([
                 'image' => $path,
                 'karbohidrat' => $request->karbohidrat,
                 'serat' => $request->serat,
                 'protein' => $request->protein
             ]);
+            $this->simpanKebiasaan('id_makan', $makan->id);
         }
+
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
     }
 
@@ -230,50 +194,40 @@ class siswaController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $idSiswa = $this->siswa->id;
-        $tanggalHariIni = Carbon::now()->toDateString();
         $path = $request->file('image')->store('bermasyarakat', 'public');
 
 
-        $masyarakat = Masyarakat::where('id_siswa', $idSiswa)
-            ->whereDate('created_at', $tanggalHariIni)
-            ->first();
 
-        if ($masyarakat) {
-            $masyarakat->update([
+        if ($this->rekap && $this->rekap->id_masyarakat) {
+            $masyarakat = Masyarakat::where('id', $this->rekap->id_masyarakat)->update([
                 'keterangan' => $request->keterangan,
                 'foto' => $path,
             ]);
         } else {
-            Masyarakat::create([
-                'id_siswa' => $idSiswa,
+            $masyarakat = Masyarakat::create([
                 'keterangan' => $request->keterangan,
                 'image' => $path,
             ]);
+            $this->simpanKebiasaan('id_masyarakat', $masyarakat->id);
         }
+
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
     }
 
     public function istirahat(Request $request)
     {
-        $waktuSekarang = Carbon::now();
-
-        $istirahat = istirahat::where('id_siswa', $this->siswa->id)
-            ->whereDate('created_at', $waktuSekarang->toDateString())
-            ->first();
-
-        if ($istirahat) {
-            $istirahat->update([
+        if ($this->rekap && $this->rekap->id_istirahat) {
+            $istirahat = Istirahat::where('id', $this->rekap->id_istirahat)->update([
                 'waktu' => $request->waktu
             ]);
         } else {
-            istirahat::create([
-                'id_siswa' => $this->siswa->id,
+            $istirahat  = istirahat::create([
                 'waktu' => $request->waktu
             ]);
+            $this->simpanKebiasaan('id_istirahat', $istirahat->id);
         }
 
-        return response()->json(["success" => true]);
+        return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
     }
 
 
@@ -297,16 +251,40 @@ class siswaController extends Controller
     }
 
     // rekap
-//     public function exportExcel(Request $request)
-// {
-//        $kelas = $request->kelas;
-//     $bulan = $request->bulan;
-//     $tahun = $request->tahun;
+    //     public function exportExcel(Request $request)
+    // {
+    //        $kelas = $request->kelas;
+    //     $bulan = $request->bulan;
+    //     $tahun = $request->tahun;
 
-//     return Excel::download(
-//         new SiswaBulananExport($kelas, $bulan, $tahun),
-//         'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
-//     );
-// }
+    //     return Excel::download(
+    //         new SiswaBulananExport($kelas, $bulan, $tahun),
+    //         'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
+    //     );
+    // }
 
+
+    private function simpanKebiasaan($fieldName, $kebiasaanId)
+    {
+        $idSiswa = $this->siswa->id;
+        $tanggalHariIni = Carbon::today();
+
+        // 1. Cari rekap hari ini berdasarkan siswa dan tanggal
+        $rekap = RekapAbsensi::where('id_siswa', $idSiswa)
+            ->whereDate('created_at', $tanggalHariIni)
+            ->first();
+
+        if ($rekap) {
+            // 2. Kalau ada, update kolom kebiasaan sesuai parameter
+            $rekap->update([
+                $fieldName => $kebiasaanId
+            ]);
+        } else {
+            // 3. Kalau belum ada, create rekap baru dengan hanya kolom kebiasaan itu
+            RekapAbsensi::create([
+                'id_siswa' => $idSiswa,
+                $fieldName => $kebiasaanId
+            ]);
+        }
+    }
 }

@@ -30,132 +30,132 @@
                 <li class="nav-item ">
                     <a href="#" class="nav-link ">
                         <i class="nav-icon fa-solid fa-landmark"></i>
-                      <p>
-                        KELAS VII
-                        <i class="right fas fa-angle-left"></i>
-                      </p>
+                        <p>
+                            KELAS VII
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                          <a href="/VIIA" class="nav-link ">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII A</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIA']) }}" class="nav-link ">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII A</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIB" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII B</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIB']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII B</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIC" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII C</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIC']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII C</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIID" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII D</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIID']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII D</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIE" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII E</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIE']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII E</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIF" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII F</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIF']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII F</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIG" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII G</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIG']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII G</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIH" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII H</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIH']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII H</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIII" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VII I</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIII']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VII I</p>
+                            </a>
                         </li>
-                      </ul>
+                    </ul>
                 </li>
                 <li class="nav-item ">
                     <a href="#" class="nav-link ">
                         <i class="nav-icon fa-solid fa-landmark"></i>
-                      <p>
-                        KELAS VIII
-                        <i class="right fas fa-angle-left"></i>
-                      </p>
+                        <p>
+                            KELAS VIII
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                          <a href="VIIIA" class="nav-link ">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII A</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIIA']) }}" class="nav-link ">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII A</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIIB" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII B</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIIB']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII B</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIIC" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII C</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIIC']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII C</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIID" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII D</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIID']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII D</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIIE" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII E</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIIE']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII E</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIIF" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII F</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIIF']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII F</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIIG" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII G</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIIG']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII G</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                          <a href="VIIIH" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII H</p>
-                          </a>
-                        </li>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIIH']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII H</p>
+                            </a>
+                        </li>`
                         <li class="nav-item">
-                          <a href="VIIII" class="nav-link">
-                            <i class="fa-solid fa-house-user nav-icon"></i>
-                            <p>VIII I</p>
-                          </a>
+                            <a href="{{ route('getAbsensi', ['kelas' => 'VIIII']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>VIII I</p>
+                            </a>
                         </li>
-                      </ul>
+                    </ul>
                 </li>
 
                 <li class="nav-item">
@@ -185,7 +185,7 @@
 
 
                 {{-- <li class="nav-item "> --}}
-                    {{-- <a href="#" class="nav-link  {{ $activeMenu == 'master' ? 'active' : '' }}">
+                {{-- <a href="#" class="nav-link  {{ activeMenu == 'master' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>
                             Master Data
@@ -193,7 +193,7 @@
                             <span class="badge badge-info right">7</span>
                         </p>
                     </a> --}}
-                    {{-- <ul class="nav nav-treeview">
+                {{-- <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="/guru" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>

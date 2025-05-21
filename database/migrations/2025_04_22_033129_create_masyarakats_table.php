@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('masyarakats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_siswa')->references("id")->on("siswas")->onDelete("cascade")->onUpdate("cascade");
             $table->text("keterangan");
             $table->string("image");
             $table->timestamps();

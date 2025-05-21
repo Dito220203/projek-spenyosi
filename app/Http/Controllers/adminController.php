@@ -10,6 +10,7 @@ use App\Models\Makan;
 use App\Models\Siswa;
 use App\Models\Masyarakat;
 use App\Models\Olahraga;
+use App\Models\RekapAbsensi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -22,6 +23,14 @@ class adminController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    protected $bulan;
+    public function __construct(Request $request)
+    {
+        $this->bulan = $request->bulan;
+    }
+
+
     public function index()
     {
 
@@ -29,444 +38,68 @@ class adminController extends Controller
     }
 
 
-    public function VIIA(Request $request)
+    public function getAbsensi(Request $request, $kelas)
     {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
+        if ($this->bulan) {
+            $rekapAbsensi = RekapAbsensi::with(['siswa','bangunpagi','belajar','beribadah','istirahat','makan','masyarakat','olahraga'])->byKelas($kelas)->whereMonth('created_at',$this->bulan)->get();
+        }else{
+            $rekapAbsensi = RekapAbsensi::with(['siswa','bangunpagi','belajar','beribadah','istirahat','makan','masyarakat','olahraga'])->byKelas($kelas)->get();
+        }
 
-        $siswaList = Siswa::where('kelas', 'VIIA')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIA', compact('siswaList'));
+        return view('admin.rekapAbsen', compact('rekapAbsensi'));
     }
 
-    public function VIIB(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
 
-        $siswaList = Siswa::where('kelas', 'VIIB')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
+    // public function search(Request $request)
+    // {
+    //     $keyword = $request->get('q');
+    //     $siswaList = Siswa::where('nama', 'like', "%$keyword%")
+    //         ->orWhere('nis', 'like', "%$keyword%")
+    //         ->get();
 
-        return view('admin.VIIB', compact('siswaList'));
-    }
+    //     $html = '';
+    //     foreach ($siswaList as $index => $siswa) {
+    //         $html .= '
+    //         <tr>
+    //             <td class="text-center">' . ($index + 1) . '</td>
+    //             <td>' . $siswa->nis . '</td>
+    //             <td>' . $siswa->nama . '</td>
+    //             <td>' . $siswa->kelas . '</td>
+    //             <td>' . $siswa->agama . '</td>
+    //             <td class="text-center">
+    //                 <button
+    //                     class="btn btn-warning btn-sm edit-btn"
+    //                     data-id="' . $siswa->id . '"
+    //                     data-nis="' . $siswa->nis . '"
+    //                     data-nama="' . $siswa->nama . '"
+    //                     data-kelas="' . $siswa->kelas . '"
+    //                     data-agama="' . $siswa->agama . '"
+    //                     data-toggle="modal"
+    //                     data-target="#editModal"
+    //                 >
+    //                     ✏️ Update
+    //                 </button>
+    //             </td>
+    //         </tr>
+    //     ';
+    //     }
 
-    public function VIIC(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
+    //     return response()->json(['html' => $html]);
+    // }
 
-        $siswaList = Siswa::where('kelas', 'VIIC')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
+    // private function filterBulan($bulan)
+    // {
+    //     return [
+    //         'bangunPagi' => BangunPagi::whereMonth('created_at', $bulan)->get(),
+    //         'belajar' => Belajar::whereMonth('created_at', $bulan)->get(),
+    //         'beribadah' => Beribadah::whereMonth('created_at', $bulan)->get(),
+    //         'istirahat' => Istirahat::whereMonth('created_at', $bulan)->get(),
+    //         'makan' => Makan::whereMonth('created_at', $bulan)->get(),
+    //         'olahraga' => OlahRaga::whereMonth('created_at', $bulan)->get(),
+    //         'masyarakat' => Masyarakat::whereMonth('created_at', $bulan)->get(),
+    //     ];
+    // }
 
-        return view('admin.VIIC', compact('siswaList'));
-    }
-    public function VIID(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIID')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIID', compact('siswaList'));
-    }
-    public function VIIE(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIE')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIE', compact('siswaList'));
-    }
-    public function VIIF(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIF')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIF', compact('siswaList'));
-    }
-    public function VIIG(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIG')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIG', compact('siswaList'));
-    }
-    public function VIIH(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIH')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIH', compact('siswaList'));
-    }
-    public function VIII(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIII')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIII', compact('siswaList'));
-    }
-
-    // kelas vIII
-    public function VIIIA(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIIA')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIIA', compact('siswaList'));
-    }
-
-    public function VIIIB(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIIB')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIIB', compact('siswaList'));
-    }
-
-    public function VIIIC(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIIC')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIIC', compact('siswaList'));
-    }
-    public function VIIID(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIID')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIID', compact('siswaList'));
-    }
-    public function VIIIE(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIIE')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIIE', compact('siswaList'));
-    }
-    public function VIIIF(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIIF')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIIF', compact('siswaList'));
-    }
-    public function VIIIG(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIIG')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIIG', compact('siswaList'));
-    }
-    public function VIIIH(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIIH')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIIH', compact('siswaList'));
-    }
-    public function VIIII(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
-
-        $siswaList = Siswa::where('kelas', 'VIIII')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'id' => $siswa->id,
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        return view('admin.VIIII', compact('siswaList'));
-    }
 
 
     public function exportPdf(Request $request)

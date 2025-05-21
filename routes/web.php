@@ -14,25 +14,9 @@ Route::get('/loginadmin', [LoginAdminController::class, 'index'])->name('loginad
 Route::post('/loginadmin', [LoginAdminController::class, 'authenticate'])->name('loginadmin.authenticate');
 
 Route::get('/admin', [adminController::class, 'index'])->name('admin.index');
-Route::get('/VIIA', [AdminController::class, 'VIIA']);
-Route::get('/VIIB', [AdminController::class, 'VIIB']);
-Route::get('/VIIC', [AdminController::class, 'VIIC']);
-Route::get('/VIID', [AdminController::class, 'VIID']);
-Route::get('/VIIE', [AdminController::class, 'VIIE']);
-Route::get('/VIIF', [AdminController::class, 'VIIF']);
-Route::get('/VIIG', [AdminController::class, 'VIIG']);
-Route::get('/VIIH', [AdminController::class, 'VIIH']);
-Route::get('/VIII', [AdminController::class, 'VIII']);
+Route::get('/admin/rekap-absensi/{kelas}', [AdminController::class, 'getAbsensi'])->name('getAbsensi');
 // KELAS VIII
-Route::get('/VIIIA', [AdminController::class, 'VIIIA']);
-Route::get('/VIIIB', [AdminController::class, 'VIIIB']);
-Route::get('/VIIIC', [AdminController::class, 'VIIIC']);
-Route::get('/VIIID', [AdminController::class, 'VIIID']);
-Route::get('/VIIIE', [AdminController::class, 'VIIIE']);
-Route::get('/VIIIF', [AdminController::class, 'VIIIF']);
-Route::get('/VIIIG', [AdminController::class, 'VIIIG']);
-Route::get('/VIIIH', [AdminController::class, 'VIIIH']);
-Route::get('/VIIII', [AdminController::class, 'VIIII']);
+
 
 Route::get('/Datasiswa', [DataSiswaController::class, 'index']);
 Route::post('/Datasiswa', [DataSiswaController::class, 'store'])->name('siswa.store');
@@ -45,6 +29,7 @@ Route::post('/import-siswa', [DataSiswaController::class, 'import'])->name('sisw
 
 Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
 
+Route::get('/search-siswa', [adminController::class, 'search'])->name('siswa.search');
 
 
 
