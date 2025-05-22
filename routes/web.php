@@ -15,6 +15,8 @@ Route::post('/loginadmin', [LoginAdminController::class, 'authenticate'])->name(
 
 Route::get('/admin', [adminController::class, 'index'])->name('admin.index');
 Route::get('/admin/rekap-absensi/{kelas}', [AdminController::class, 'getAbsensi'])->name('getAbsensi');
+Route::get('/export-excel', [siswaController::class, 'exportExcel'])->name('export.excel');
+
 // KELAS VIII
 
 
@@ -27,7 +29,7 @@ Route::post('/import-siswa', [DataSiswaController::class, 'import'])->name('sisw
 
 
 
-Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
+// Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
 
 Route::get('/search-siswa', [adminController::class, 'search'])->name('siswa.search');
 
@@ -36,9 +38,9 @@ Route::get('/search-siswa', [adminController::class, 'search'])->name('siswa.sea
 
 
 
-Route::get('/rekap/hari-ini', [AdminController::class, 'rekapHariIni'])->name('recap.today');
-Route::get('/rekap/bulan', [SiswaController::class, 'rekapBulan'])->name('recap.month');
-Route::get('/rekap/export-pdf', [AdminController::class, 'exportPdf'])->name('export.pdf');
+// Route::get('/rekap/hari-ini', [AdminController::class, 'rekapHariIni'])->name('recap.today');
+// Route::get('/rekap/bulan', [SiswaController::class, 'rekapBulan'])->name('recap.month');
+// Route::get('/rekap/export-pdf', [AdminController::class, 'exportPdf'])->name('export.pdf');
 
 
 

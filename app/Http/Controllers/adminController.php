@@ -13,7 +13,10 @@ use App\Models\Olahraga;
 use App\Models\RekapAbsensi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\RekapAbsensiExport;
+use App\Exports\ExportExcel;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -48,6 +51,18 @@ class adminController extends Controller
 
         return view('admin.rekapAbsen', compact('rekapAbsensi'));
     }
+
+public function exportExcel(Request $request)
+{
+    $rekapAbsensi = RekapAbsensi::with('siswa')
+        ->whereMonth('created_at', $request->bulan)
+        ->get();
+
+    return Excel::download(new ExportExcel($rekapAbsensi), 'rekap.xlsx');
+}
+
+
+
 
 
     // public function search(Request $request)
@@ -102,28 +117,5 @@ class adminController extends Controller
 
 
 
-    public function exportPdf(Request $request)
-    {
-        $tanggal = Carbon::createFromDate(
-            $request->tahun ?? now()->year,
-            $request->bulan ?? now()->month,
-            $request->tanggal ?? now()->day
-        )->toDateString();
 
-        $siswaList = Siswa::where('kelas', 'VIIA')->get()->map(function ($siswa) use ($tanggal) {
-            return [
-                'nama' => $siswa->nama,
-                'bangun_pagi' => BangunPagi::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'beribadah' => Beribadah::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'olahraga' => Olahraga::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'belajar' => Belajar::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'makan' => Makan::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'masyarakat' => Masyarakat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-                'istirahat' => Istirahat::where('id_siswa', $siswa->id)->whereDate('created_at', $tanggal)->exists(),
-            ];
-        });
-
-        $pdf = Pdf::loadView('admin.VIIA-pdf', compact('siswaList', 'tanggal'));
-        return $pdf->download("rekap-{$tanggal}.pdf");
-    }
 }

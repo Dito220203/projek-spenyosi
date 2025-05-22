@@ -39,7 +39,7 @@ class siswaController extends Controller
     public function index()
     {
         $rekapHari = Siswa::whereHas('rekapabsensi', function ($q) {
-            $q->where('id_siswa', $this->siswa->rekapabsensi->id);
+            // $q->where('id_siswa', $this->siswa->rekapabsensi->id);
         })->whereDate('created_at', $this->waktuSekarang)->first();
         return view('siswa.index', ['siswa' => $this->siswa, 'rekaps' => $rekapHari]);
 
@@ -251,17 +251,17 @@ class siswaController extends Controller
     }
 
     // rekap
-    //     public function exportExcel(Request $request)
-    // {
-    //        $kelas = $request->kelas;
-    //     $bulan = $request->bulan;
-    //     $tahun = $request->tahun;
+        public function exportExcel(Request $request)
+    {
+           $kelas = $request->kelas;
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
 
-    //     return Excel::download(
-    //         new SiswaBulananExport($kelas, $bulan, $tahun),
-    //         'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
-    //     );
-    // }
+        return Excel::download(
+            new RekapAbsensi($kelas, $bulan, $tahun),
+            'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
+        );
+    }
 
 
     private function simpanKebiasaan($fieldName, $kebiasaanId)

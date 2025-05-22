@@ -12,12 +12,9 @@
                                 <h1>VII A</h1>
                                 <div class="mb-3 d-flex justify-content-between align-items-center">
                                     <div>
-                                        {{-- <a href="{{ route('recap.today') }}" class="btn btn-success mr-2">📅 Rekap Hari Ini</a> --}}
-                                        {{-- <a href="" class="btn btn-warning mr-2">🗓️ Rekap Bulan Ini</a> --}}
+
                                     </div>
                                     <div>
-                                        <a href="{{ route('export.pdf', request()->all()) }}" class="btn btn-danger">🖨️ Cetak
-                                            PDF</a>
                                         <a href="{{ route('export.excel', request()->all()) }}" class="btn btn-success">📤
                                             Export Excel</a>
 
@@ -85,8 +82,8 @@
                                         @endphp
                                         @forelse ($rekapAbsensi as $absen)
                                             <tr>
-                                                <td>{{ $no++}}</td>
-                                                <td>{{$absen->siswa->nama}}</td>
+                                                <td>{{ $no++ }}</td>
+                                                <td>{{ $absen->siswa->nama }}</td>
                                                 <td>{{ $absen->id_bangun_pagi != null ? '✔️' : '❌' }}</td>
                                                 <td>{{ $absen->id_beribadah != null ? '✔️' : '❌' }}</td>
                                                 <td>{{ $absen->id_olahraga != null ? '✔️' : '❌' }}</td>
@@ -94,53 +91,96 @@
                                                 <td>{{ $absen->id_makan != null ? '✔️' : '❌' }}</td>
                                                 <td>{{ $absen->id_masyarakat != null ? '✔️' : '❌' }}</td>
                                                 <td>{{ $absen->id_istirahat != null ? '✔️' : '❌' }}</td>
-                                                <td class="text-nowrap">{{$absen->created_at->format('d M Y')}}</td>
+                                                <td class="text-nowrap">{{ $absen->created_at->format('d M Y') }}</td>
                                                 <td>
-                                                    <!-- Tambah tombol aksi jika perlu -->
-                                                    <a href="#" class="btn btn-info btn-sm">Detail</a>
+                                                    <a href="#" class="btn btn-info btn-sm btn-detail"
+                                                        data-nama="{{ $absen->siswa->nama }}"
+                                                         data-bangun="{{ $absen->bangun_pagi->waktu ?? '-' }}"
+                                                        data-ibadah="{{ $absen->beribadah->keterangan ?? '-' }}"
+                                                        data-ibadah-foto="{{ asset('storage/' . ($absen->beribadah->image ?? 'default.jpg')) }}"
+                                                        data-olahraga="{{ $absen->olahraga->ket_olahraga ?? '-' }}"
+                                                        data-olahraga-foto="{{ asset('storage/' . ($absen->olahraga->image ?? 'default.jpg')) }}"
+                                                        data-belajar="{{ $absen->belajar->ket_belajar ?? '-' }}"
+                                                        data-belajar-foto="{{ asset('storage/' . ($absen->belajar->image ?? 'default.jpg')) }}"
+                                                        data-makan="{{ $absen->makan->karbohidrat ?? '-' }}, {{ $absen->makan->protein ?? '-' }}, {{ $absen->makan->serat ?? '-' }}, {{ $absen->makan->minum ?? '-' }}"
+                                                        data-makan-foto="{{ asset('storage/' . ($absen->makan->image ?? 'default.jpg')) }}"
+                                                        data-masyarakat="{{ $absen->masyarakat->keterangan ?? '-' }}"
+                                                        data-masyarakat-foto="{{ asset('storage/' . ($absen->masyarakat->image ?? 'default.jpg')) }}"
+                                                        data-istirahat="{{ $absen->istirahat->waktu ?? '-' }}">
+                                                        Detail
+                                                    </a>
                                                 </td>
+
+
                                                 <script>
                                                     document.addEventListener("DOMContentLoaded", function() {
-                                                        document.querySelectorAll('.btn-info').forEach(function(button) {
-                                                            button.addEventListener('click', function(e) {
+                                                        document.querySelectorAll(".btn-detail").forEach(function(btn) {
+                                                            btn.addEventListener("click", function(e) {
                                                                 e.preventDefault();
-                                                                const row = this.closest('tr');
-                                                                const data = {
-                                                                    nama: row.children[1].innerText,
-                                                                    bangun: row.children[2].innerText,
-                                                                    ibadah: row.children[3].innerText,
-                                                                    olahraga: row.children[4].innerText,
-                                                                    belajar: row.children[5].innerText,
-                                                                    makan: row.children[6].innerText,
-                                                                    masyarakat: row.children[7].innerText,
-                                                                    istirahat: row.children[8].innerText,
-                                                                };
 
-                                                                Swal.fire({
-                                                                    title: `<strong>Detail Siswa</strong>`,
-                                                                    html: `
-                                                                <b>Nama:</b> ${data.nama}<br>
-                                                                <b>Bangun Pagi:</b> ${data.bangun}<br>
-                                                                <b>Beribadah:</b> ${data.ibadah}<br>
-                                                                <b>Berolahraga:</b> ${data.olahraga}<br>
-                                                                <b>Gemar Belajar:</b> ${data.belajar}<br>
-                                                                <b>Makan Sehat & Bergizi:</b> ${data.makan}<br>
-                                                                <b>Bermasyarakat:</b> ${data.masyarakat}<br>
-                                                                <b>Istirahat Cukup:</b> ${data.istirahat}
-                                                            `,
-                                                                    icon: 'info'
-                                                                });
+                                                                const nama = this.dataset.nama;
+                                                                const detailHTML = `
+                                                                    ${createDetailCard("Bangun Pagi", this.dataset.bangun, this.dataset.bangunFoto)}
+                                                                    ${createDetailCard("Beribadah", this.dataset.ibadah, this.dataset.ibadahFoto)}
+                                                                    ${createDetailCard("Berolahraga", this.dataset.olahraga, this.dataset.olahragaFoto)}
+                                                                    ${createDetailCard("Gemar Belajar", this.dataset.belajar, this.dataset.belajarFoto)}
+                                                                    ${createDetailCard("Makan Sehat & Bergizi", this.dataset.makan, this.dataset.makanFoto)}
+                                                                    ${createDetailCard("Bermasyarakat", this.dataset.masyarakat, this.dataset.masyarakatFoto)}
+                                                                    ${createDetailCard("Istirahat Cukup", this.dataset.istirahat, null)}
+                                                                `;
+
+                                                                document.getElementById("detailNamaSiswa").innerText = `Nama: ${nama}`;
+                                                                document.getElementById("detailIsiKebiasaan").innerHTML = detailHTML;
+
+                                                                const modal = new bootstrap.Modal(document.getElementById(
+                                                                    'modalDetailKebiasaan'));
+                                                                modal.show();
                                                             });
                                                         });
+
+                                                        function createDetailCard(judul, keterangan, fotoUrl) {
+                                                            const foto = fotoUrl ?
+                                                                `<img src="${fotoUrl}" class="img-fluid rounded" style="max-height: 200px;">` : '';
+                                                            return `
+                                                        <div class="col-md-6">
+                                                            <div class="card shadow-sm p-3">
+                                                                <h6>${judul}</h6>
+
+                                                                <p>${keterangan}</p>
+                                                                ${foto}
+                                                            </div>
+                                                        </div>`;
+                                                        }
                                                     });
                                                 </script>
 
+
                                             </tr>
-                                            @empty
-                                             <td class="text-center" colspan="11">Tidak ada data</td>
+                                        @empty
+                                            <td class="text-center" colspan="11">Tidak ada data</td>
                                         @endforelse
                                     </tbody>
                                 </table>
+                                <div class="modal fade" id="modalDetailKebiasaan" tabindex="-1"
+                                    aria-labelledby="modalDetailKebiasaanLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalDetailKebiasaanLabel">Detail Kebiasaan
+                                                    Siswa</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Tutup"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5 id="detailNamaSiswa"></h5>
+                                                <hr>
+                                                <div id="detailIsiKebiasaan" class="row g-3">
+                                                    <!-- Konten akan diisi lewat JavaScript -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
