@@ -47,7 +47,7 @@ Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/login-siswa', [LoginController::class, 'login'])->name('login.post');
 
 //siswa
-Route::middleware(['auth:siswa'])->group(function (){
+Route::middleware(['auth:siswa'])->group(function () {
     Route::get('/siswa', [siswaController::class, 'index'])->name('siswa.index');
     Route::post('/bangun-pagi', [siswaController::class, 'bgnPagi'])->name('bangunpagi');
     Route::post('/masyarakat', [siswaController::class, 'Masyarakat'])->name('masyarakat');
@@ -59,9 +59,4 @@ Route::middleware(['auth:siswa'])->group(function (){
     Route::post('/makan', [siswaController::class, 'Makan'])->name('makan');
     Route::post('/istirahat', [siswaController::class, 'Istirahat'])->name('istirahat');
     Route::get('/siswa/status-kebiasaan', [siswaController::class, 'cekStatusKebiasaan']);
-
-
-
 });
-
-

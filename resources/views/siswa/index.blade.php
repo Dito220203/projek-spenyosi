@@ -209,6 +209,33 @@
     .indicator.active {
         background-color: blue;
     }
+
+    @media (max-width: 768px) {
+        .carousel {
+            display: block;
+            /* Bukan flex agar tidak horizontal */
+            overflow-x: unset;
+            /* Nonaktifkan scroll horizontal */
+            padding: 0;
+        }
+
+        .slide-group {
+            display: block;
+            /* Supaya item di dalamnya menumpuk ke bawah */
+            margin-bottom: 20px;
+        }
+
+        .card {
+            width: 100%;
+            min-width: unset;
+            margin-bottom: 20px;
+        }
+
+        .indicators {
+            display: none;
+            /* Sembunyikan indikator di mobile */
+        }
+    }
 </style>
 
 <body>
@@ -279,13 +306,12 @@
     </div>
 
     <script>
-        let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
+        let listKebiasaanHtml = '';
 
         function updateProgress(data) {
             const kebiasaan = [
                 'Bangun Pagi',
                 'Beribadah',
-                'BeribadahKristen',
                 'Berolahraga',
                 'Gemar Belajar',
                 'Makan Sehat & Bergizi',
@@ -350,7 +376,6 @@
 
 
 
-
     <!-- Modal bangun pagi -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -378,46 +403,82 @@
                             Simpan
                         </button>
                     </div>
+                </form>
             </div>
-            </form>
         </div>
     </div>
 
     <!-- Modal Beribadah -->
     <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Beribadah</h5>
+                    <h5 class="modal-title">Form Beribadah</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
                     <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
                         @csrf
-                        <label>Beribadah</label>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="subuh"> Subuh</label>
-                            <input type="time" class="salat-time form-control mt-1" name="subuh" readonly hidden>
+
+                        @php
+                            $ibadahList = [
+                                'subuh' => 'Subuh',
+                                'duhur' => 'Dzuhur',
+                                'asar' => 'Ashar',
+                                'magrib' => 'Maghrib',
+                                'isyak' => 'Isya',
+                            ];
+                            $dataIbadah = $rekaps->beribadah ?? null;
+                        @endphp
+
+                        <!-- Checkbox Horizontal -->
+                        <div class="d-flex justify-content-center flex-wrap gap-4 mb-4">
+                            @foreach ($ibadahList as $key => $label)
+                                <div class="text-center">
+                                    <label class="form-check-label d-flex flex-column align-items-center">
+                                        <input type="checkbox" class="form-check-input mb-1 salat-checkbox"
+                                            value="{{ $key }}" {{ $dataIbadah?->$key ? 'checked' : '' }}>
+                                        {{ $label }}
+                                    </label>
+                                    <input type="time" class="salat-time form-control mt-1"
+                                        name="{{ $key }}" value="{{ $dataIbadah?->$key }}"
+                                        {{ $dataIbadah?->$key ? '' : 'hidden' }} readonly hidden>
+                                </div>
+                            @endforeach
                         </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="dzuhur"> Dzuhur</label>
-                            <input type="time" class="salat-time form-control mt-1" name="duhur" readonly hidden>
+
+                        <!-- Status Table -->
+                        <div class="table-responsive">
+                            <h6 class="text-center mb-3">Status Ibadah Hari Ini:</h6>
+                            <table class="table table-bordered text-center align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        @foreach ($ibadahList as $label)
+                                            <th>{{ $label }}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        @foreach ($ibadahList as $key => $label)
+                                            <td>
+                                                @if ($dataIbadah?->$key)
+                                                    <span>{{ $dataIbadah->$key }}</span>
+                                                @else
+                                                    <span class="text-danger fs-4">✘</span>
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="ashar"> Ashar</label>
-                            <input type="time" class="salat-time form-control mt-1" name="asar" readonly hidden>
-                        </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="maghrib"> Maghrib</label>
-                            <input type="time" class="salat-time form-control mt-1" name="magrib" readonly hidden>
-                        </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="isya"> Isya</label>
-                            <input type="time" class="salat-time form-control mt-1" name="isyak" readonly hidden>
-                        </div>
+
                     </form>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
@@ -554,7 +615,7 @@
                         <div class="mb-3">
                             <label for="ket_olahraga" class="form-label">Jenis Olahraga</label>
                             <textarea class="form-control" id="ket_olahraga" name="ket_olahraga" rows="2" required
-                                placeholder="Olahraga Apa Kamu Hari Ini ?">{{old('ket_olahraga', $rekaps->olahraga?->ket_olahraga ?? '')}}</textarea>
+                                placeholder="Olahraga Apa Kamu Hari Ini ?">{{ old('ket_olahraga', $rekaps->olahraga?->ket_olahraga ?? '') }}</textarea>
                         </div>
 
                         <div class="modal-footer">
@@ -742,7 +803,7 @@
     <div class="container">
         <h2 style="text-align: center;">7 KEBIASAAN ANAK</h2>
         <div class="carousel slider" id="carousel">
-            <div class="slide-group">
+            <div class="slide-group ">
                 <div class="card">
                     <h3>Bangun Pagi</h3>
                     <img src="{{ asset('img/clock.png') }}" alt="Bangun Pagi">
