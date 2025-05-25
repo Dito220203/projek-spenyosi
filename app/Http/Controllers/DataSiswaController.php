@@ -14,8 +14,24 @@ class DataSiswaController extends Controller
      */
     public function index()
     {
-        $siswaList = Siswa::orderBy('nama')->paginate(10); // Bisa pakai pagination
+        $siswaList = Siswa::orderBy('nis')->paginate(7); // Bisa pakai pagination
         return view('admin.Datasiswa', compact('siswaList'));
+
+       
+
+    // Jika ada input search
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+        $query->where('nama', 'like', "%{$search}%")
+              ->orWhere('nis', 'like', "%{$search}%")
+              ->orWhere('kelas', 'like', "%{$search}%")
+              ->orWhere('agama', 'like', "%{$search}%");
+    }
+
+    // Urutkan berdasarkan NIS
+    $siswas = $query->orderBy('nis', 'asc')->get();
+
+    return view('Datasiswa', compact('siswas'));
     }
 
  
@@ -25,9 +41,10 @@ public function import(Request $request)
         'file' => 'required|mimes:xls,xlsx'
     ]);
 
-    Excel::import(new SiswaImport, $request->file('file'));
+    Excel::import(new SiswaImport, $request->file('file')->store('temp'));
 
-    return redirect('/Datasiswa')->with('success', 'Data siswa berhasil diimport!');
+
+    return redirect('/Datasiswa')->with('success', 'Data siswa berhasil di Import!');
 }
 
     

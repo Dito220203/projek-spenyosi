@@ -55,7 +55,8 @@ class siswaController extends Controller
             ]);
         }
 
-        return response()->json(["success" => true]);
+        return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
+        // return response()->json(["success" => true]);
     }
 
     public function Beribadah(Request $request)
@@ -273,7 +274,8 @@ class siswaController extends Controller
             ]);
         }
 
-        return response()->json(["success" => true]);
+        return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
+
     }
 
 
