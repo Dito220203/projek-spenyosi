@@ -14,7 +14,7 @@ class DataSiswaController extends Controller
      */
     public function index()
     {
-        $siswaList = Siswa::orderBy('nis')->paginate(7); // Bisa pakai pagination
+        $siswaList = Siswa::orderBy('kelas')->paginate(7); // Bisa pakai pagination
         return view('admin.Datasiswa', compact('siswaList'));
 
        

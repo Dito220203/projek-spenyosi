@@ -1,17 +1,37 @@
 @extends('components.layout')
 @section('content')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#searchInput').on('keyup', function() {
+                const query = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('siswa.search') }}",
+                    type: "GET",
+                    data: {
+                        q: query
+                    },
+                    success: function(res) {
+                        $('#siswaTableBody').html(res.html);
+                    }
+                });
+            });
+        });
+    </script>
 
     <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
 
-                <div class="row mb-3">
+                <div class="row mb-2">
                     <div class="col-12 d-flex justify-content-between align-items-center">
                         <h2 class="mb-0">📋 Data Siswa</h2>
+
                         <div>
                             <form action="{{ route('siswa.import') }}" method="POST" enctype="multipart/form-data"
-                                class="mb-4">
+                                class="mb-2">
                                 @csrf
                                 <div class="input-group">
                                     <input type="file" name="file" class="form-control" required>
@@ -24,11 +44,12 @@
                         </div>
                     </div>
                 </div>
-{{-- search --}}
-<form action="Datasiswa" method="GET" class="mb-3 d-flex">
-    <input type="text" name="search" class="form-control me-2" placeholder="Cari nama / NIS / kelas / agama" value="{{ request('search') }}">
-    <button type="submit" class="btn btn-primary">Cari</button>
-</form>
+                {{-- search --}}
+                <form action="Datasiswa" method="GET" class="mb-3 d-flex">
+                    <input type="text" name="search" class="form-control me-2"
+                        placeholder="Cari nama / NIS / kelas / agama" value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </form>
                 <div class="card shadow">
                     <div class="card-body">
                         <table class="table table-hover table-bordered table-striped">
@@ -68,13 +89,19 @@
                         </table>
 
                         {{-- Optional: Pagination --}}
-                        <div class="d-flex justify-content-center">
-                            {{ $siswaList->links() }}
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="text-muted">
+                                Menampilkan {{ $siswaList->firstItem() }} sampai {{ $siswaList->lastItem() }} dari total
+                                {{ $siswaList->total() }} data
+                            </div>
+                            <div>
+                                {{ $siswaList->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
-    
                 <!-- Modal Tambah Siswa -->
                 <div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="tambahModalLabel"
                     aria-hidden="true">

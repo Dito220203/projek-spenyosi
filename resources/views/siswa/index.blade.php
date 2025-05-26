@@ -20,7 +20,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('js/beribadah.js') }}"></script> {{-- Contoh file JS eksternal --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </head>
@@ -209,6 +209,33 @@
     .indicator.active {
         background-color: blue;
     }
+
+    @media (max-width: 768px) {
+        .carousel {
+            display: block;
+            /* Bukan flex agar tidak horizontal */
+            overflow-x: unset;
+            /* Nonaktifkan scroll horizontal */
+            padding: 0;
+        }
+
+        .slide-group {
+            display: block;
+            /* Supaya item di dalamnya menumpuk ke bawah */
+            margin-bottom: 20px;
+        }
+
+        .card {
+            width: 100%;
+            min-width: unset;
+            margin-bottom: 20px;
+        }
+
+        .indicators {
+            display: none;
+            /* Sembunyikan indikator di mobile */
+        }
+    }
 </style>
 
 <body>
@@ -261,10 +288,10 @@
         <span>SPENYOSI</span>
         <div class="user-info">
 
-            <h6>{{ auth()->user()->nama }}</h6>
-            <h6>{{ auth()->user()->kelas }}</h6>
-            <h6>{{ auth()->user()->agama }}</h6>
-             <a href="/"><i class="fa-solid fa-right-from-bracket"></i></a>
+            <h6>{{ $siswa->nama }}</h6>
+            <h6>{{ $siswa->kelas }}</h6>
+            <h6>{{ $siswa->agama }}</h6>
+            <a href="/"><i class="fa-solid fa-right-from-bracket"></i></a>
             {{-- <a href="#">Log Out</a> --}}
 
         </div>
@@ -279,13 +306,12 @@
     </div>
 
     <script>
-        let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
+        let listKebiasaanHtml = '';
 
         function updateProgress(data) {
             const kebiasaan = [
                 'Bangun Pagi',
                 'Beribadah',
-                'BeribadahKristen',
                 'Berolahraga',
                 'Gemar Belajar',
                 'Makan Sehat & Bergizi',
@@ -350,7 +376,6 @@
 
 
 
-
     <!-- Modal bangun pagi -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -378,46 +403,82 @@
                             Simpan
                         </button>
                     </div>
+                </form>
             </div>
-            </form>
         </div>
     </div>
 
     <!-- Modal Beribadah -->
     <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Beribadah</h5>
+                    <h5 class="modal-title">Form Beribadah</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
                     <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
                         @csrf
-                        <label>Beribadah</label>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="subuh"> Subuh</label>
-                            <input type="time" class="salat-time form-control mt-1" name="subuh" readonly hidden>
+
+                        @php
+                            $ibadahList = [
+                                'subuh' => 'Subuh',
+                                'duhur' => 'Dzuhur',
+                                'asar' => 'Ashar',
+                                'magrib' => 'Maghrib',
+                                'isyak' => 'Isya',
+                            ];
+                            $dataIbadah = $rekaps->beribadah ?? null;
+                        @endphp
+
+                        <!-- Checkbox Horizontal -->
+                        <div class="d-flex justify-content-center flex-wrap gap-4 mb-4">
+                            @foreach ($ibadahList as $key => $label)
+                                <div class="text-center">
+                                    <label class="form-check-label d-flex flex-column align-items-center">
+                                        <input type="checkbox" class="form-check-input mb-1 salat-checkbox"
+                                            value="{{ $key }}" {{ $dataIbadah?->$key ? 'checked' : '' }}>
+                                        {{ $label }}
+                                    </label>
+                                    <input type="time" class="salat-time form-control mt-1"
+                                        name="{{ $key }}" value="{{ $dataIbadah?->$key }}"
+                                        {{ $dataIbadah?->$key ? '' : 'hidden' }} readonly hidden>
+                                </div>
+                            @endforeach
                         </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="dzuhur"> Dzuhur</label>
-                            <input type="time" class="salat-time form-control mt-1" name="duhur" readonly hidden>
+
+                        <!-- Status Table -->
+                        <div class="table-responsive">
+                            <h6 class="text-center mb-3">Status Ibadah Hari Ini:</h6>
+                            <table class="table table-bordered text-center align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        @foreach ($ibadahList as $label)
+                                            <th>{{ $label }}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        @foreach ($ibadahList as $key => $label)
+                                            <td>
+                                                @if ($dataIbadah?->$key)
+                                                    <span>{{ $dataIbadah->$key }}</span>
+                                                @else
+                                                    <span class="text-danger fs-4">✘</span>
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="ashar"> Ashar</label>
-                            <input type="time" class="salat-time form-control mt-1" name="asar" readonly hidden>
-                        </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="maghrib"> Maghrib</label>
-                            <input type="time" class="salat-time form-control mt-1" name="magrib" readonly hidden>
-                        </div>
-                        <div>
-                            <label><input type="checkbox" class="salat-checkbox" value="isya"> Isya</label>
-                            <input type="time" class="salat-time form-control mt-1" name="isyak" readonly hidden>
-                        </div>
+
                     </form>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
@@ -477,107 +538,52 @@
         });
     </script>
 
-   <!-- Modal Beribadah (Kristen - Sederhana) -->
-<div class="modal fade" id="modalKristen" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Ibadah Harian</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('beribadahkristen') }}" method="post" id="formBeribadahkristen">
-                    @csrf
+    <!-- Modal Beribadah (Kristen - Sederhana) -->
+    <div class="modal fade" id="modalKristen" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Ibadah Harian</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('beribadahkristen') }}" method="post" id="formBeribadahkristen">
+                        @csrf
 
-                    <div>
-                         <label><input type="checkbox" class="ibadah-checkbox" value="doa_pagi"> Doa Pagi</label>
-                            <input type="time" class="ibadah-time form-control mt-1" name="subuh" readonly hidden>
-                    </div>
-                    <div>
-                         <label><input type="checkbox" class="ibadah-checkbox" value="alkitab"> Membaca Alkitab/Renungan</label>
-                            <input type="time" class="ibadah-time form-control mt-1" name="asar" readonly hidden>
-                    </div>
-                    <div>
-                        <label><input type="checkbox" class="ibadah-checkbox" value="doa_malam"> Doa Malam</label>
-                            <input type="time" class="ibadah-time form-control mt-1" name="isyak" readonly hidden>
-                    </div>
+                        <div>
+                            <label><input type="checkbox" class="ibadah-checkbox" value="doa_pagi"> Doa Pagi</label>
+                            <input type="time" class="ibadah-time form-control mt-1" name="subuh" readonly
+                                hidden>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" class="ibadah-checkbox" value="alkitab"> Membaca
+                                Alkitab/Renungan</label>
+                            <input type="time" class="ibadah-time form-control mt-1" name="asar" readonly
+                                hidden>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" class="ibadah-checkbox" value="doa_malam"> Doa
+                                Malam</label>
+                            <input type="time" class="ibadah-time form-control mt-1" name="isyak" readonly
+                                hidden>
+                        </div>
 
-                </form>
+                    </form>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" form="formBeribadahkristen" class="btn btn-primary">Simpan</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" form="formBeribadahkristen" class="btn btn-primary">Simpan</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const checkboxes = document.querySelectorAll('.ibadah-checkbox');
-
-    // Hari sekarang (format: YYYY-MM-DD)
-    const today = new Date().toISOString().split('T')[0];
-
-    checkboxes.forEach(function(checkbox) {
-        const value = checkbox.value;
-        const timeInput = checkbox.closest('div').querySelector('.ibadah-time');
-        const dataKey = `ibadah_${value}`;
-
-        // Ambil dari localStorage
-        const saved = localStorage.getItem(dataKey);
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            if (parsed.date === today) {
-                checkbox.checked = true;
-                timeInput.value = parsed.time;
-                timeInput.style.display = 'block';
-            } else {
-                localStorage.removeItem(dataKey);
-            }
-        }
-
-        checkbox.addEventListener('change', function() {
-            if (checkbox.checked) {
-                const now = new Date();
-                const jam = now.getHours().toString().padStart(2, '0');
-                const menit = now.getMinutes().toString().padStart(2, '0');
-                const waktu = `${jam}:${menit}`;
-
-                timeInput.value = waktu;
-                timeInput.style.display = 'block';
-
-                localStorage.setItem(dataKey, JSON.stringify({
-                    time: waktu,
-                    date: today
-                }));
-            } else {
-                timeInput.value = '';
-                timeInput.style.display = 'none';
-                localStorage.removeItem(dataKey);
-            }
-        });
-    });
-});
-</script>
+    <script></script>
 
 
 
-    <script>
-        $(document).ready(function() {
-            $('#btn-beribadah').click(function() {
-                let agama = "{{ auth()->user()->agama }}";
 
-                if (agama === 'Islam') {
-                    $('#modalIslam').modal('show');
-                } else if (agama === 'Kristen') {
-                    $('#modalKristen').modal('show');
-                } else {
-                    alert('Agama tidak dikenali');
-                }
-            });
-        });
-    </script>
 
     {{-- modal Olahraga --}}
     <div class="modal fade" id="exampleModalOlahraga" tabindex="-1" aria-labelledby="exampleModalOlahragaLabel"
@@ -609,7 +615,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="mb-3">
                             <label for="ket_olahraga" class="form-label">Jenis Olahraga</label>
                             <textarea class="form-control" id="ket_olahraga" name="ket_olahraga" rows="2" required
-                                placeholder="Olahraga Apa Kamu Hari Ini ?"></textarea>
+                                placeholder="Olahraga Apa Kamu Hari Ini ?">{{ old('ket_olahraga', $rekaps->olahraga?->ket_olahraga ?? '') }}</textarea>
                         </div>
 
                         <div class="modal-footer">
@@ -780,25 +786,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 
-    <script>
-        function updateJam() {
-            const now = new Date();
-            // Format waktu: jam:menit:detik (HH:MM:SS)
-            const jam = now.toTimeString().split(' ')[0]; // hasilnya "21:54:50"
-            document.getElementById('jamSekarang').textContent = jam;
-            document.getElementById('inputJamIstirahat').value = jam;
-        }
-
-        const modalIstirahat = document.getElementById('exampleModalIstirahat');
-        modalIstirahat.addEventListener('shown.bs.modal', function() {
-            updateJam(); // inisialisasi awal
-            window.jamInterval = setInterval(updateJam, 1000);
-        });
-
-        modalIstirahat.addEventListener('hidden.bs.modal', function() {
-            clearInterval(window.jamInterval);
-        });
-    </script> 
+    <script></script>
 
 
 
@@ -809,7 +797,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="container">
         <h2 style="text-align: center;">7 KEBIASAAN ANAK</h2>
         <div class="carousel slider" id="carousel">
-            <div class="slide-group">
+            <div class="slide-group ">
                 <div class="card">
                     <h3>Bangun Pagi</h3>
                     <img src="{{ asset('img/clock.png') }}" alt="Bangun Pagi">
@@ -822,7 +810,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card">
                     <h3>Beribadah</h3>
                     <img src="{{ asset('img/agama.png') }}" alt="Beribadah">
-                    <button type="button" class="btn btn-primary" id="btn-beribadah">
+                    <button type="button" class="btn btn-primary" id="btn-beribadah" data-bs-toggle="modal"
+                        @if ($siswa->agama == 'Islam') data-bs-target="#modalslam"
+                    @elseif ($siswa->agama == 'Kristen')
+                    data-bs-target="#modalKristen" @endif>
                         Isi Data
                     </button>
 
@@ -874,17 +865,17 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 
-@if(session('success'))
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: '{{ session('success') }}',
-        timer: 3000,
-        showConfirmButton: false
-    });
-</script>
-@endif
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
@@ -895,6 +886,77 @@ document.addEventListener('DOMContentLoaded', function() {
     <script src="{{ asset('js/script.js') }}"></script>
 
     <script src="{{ asset('js/bangun-pagi.js') }}"></script>
+
+
+    <script>
+        function updateJam() {
+            const now = new Date();
+            // Format waktu: jam:menit:detik (HH:MM:SS)
+            const jam = now.toTimeString().split(' ')[0]; // hasilnya "21:54:50"
+            document.getElementById('jamSekarang').textContent = jam;
+            document.getElementById('inputJamIstirahat').value = jam;
+        }
+
+        const modalIstirahat = document.getElementById('exampleModalIstirahat');
+        modalIstirahat.addEventListener('shown.bs.modal', function() {
+            updateJam(); // inisialisasi awal
+            window.jamInterval = setInterval(updateJam, 1000);
+        });
+
+        modalIstirahat.addEventListener('hidden.bs.modal', function() {
+            clearInterval(window.jamInterval);
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.ibadah-checkbox');
+
+            // Hari sekarang (format: YYYY-MM-DD)
+            const today = new Date().toISOString().split('T')[0];
+
+            checkboxes.forEach(function(checkbox) {
+                const value = checkbox.value;
+                const timeInput = checkbox.closest('div').querySelector('.ibadah-time');
+                const dataKey = `ibadah_${value}`;
+
+                // Ambil dari localStorage
+                const saved = localStorage.getItem(dataKey);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.date === today) {
+                        checkbox.checked = true;
+                        timeInput.value = parsed.time;
+                        timeInput.style.display = 'block';
+                    } else {
+                        localStorage.removeItem(dataKey);
+                    }
+                }
+
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        const now = new Date();
+                        const jam = now.getHours().toString().padStart(2, '0');
+                        const menit = now.getMinutes().toString().padStart(2, '0');
+                        const waktu = `${jam}:${menit}`;
+
+                        timeInput.value = waktu;
+                        timeInput.style.display = 'block';
+
+                        localStorage.setItem(dataKey, JSON.stringify({
+                            time: waktu,
+                            date: today
+                        }));
+                    } else {
+                        timeInput.value = '';
+                        timeInput.style.display = 'none';
+                        localStorage.removeItem(dataKey);
+                    }
+                });
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>
