@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('masyarakats', function (Blueprint $table) {
             $table->id();
-            $table->text("keterangan");
             $table->string("image");
+            $table->text("keterangan");
             $table->timestamps();
         });
     }

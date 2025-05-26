@@ -20,7 +20,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    {{-- HAPUS baris ini: <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+    <!-- Bootstrap 4 -->
+
 
     {{-- Gaya CSS tambahan jika ada --}}
 </head>
@@ -33,7 +34,7 @@
     </div>
 
     <footer class="main-footer">
-        <strong>Copyright &copy; SMP NEGERI 1 YOSOWILANGUN </a>.</strong>
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">Spenyosi 7 Kebiasaan anak</a>.</strong>
         All rights reserved.
         
     </footer>

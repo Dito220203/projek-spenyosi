@@ -2,6 +2,19 @@
 @section('content')
 {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
 
+                                {{-- <div class="progress mb-2">
+                                    <div class="progress-bar
+                                        @if($data['persen'] == 0)
+                                            bg-secondary
+                                        @elseif($data['persen'] < 50)
+                                            bg-warning
+                                        @else
+                                            bg-success
+                                        @endif
+                                    " role="progressbar" style="width: {{ $data['persen'] }}%" aria-valuenow="{{ $data['persen'] }}" aria-valuemin="0" aria-valuemax="100">
+                                        {{ $data['persen'] }}%
+                                    </div>
+                                </div> --}}
 
     {{-- <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -97,7 +110,7 @@
                                 </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
 
             </section>

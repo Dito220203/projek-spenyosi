@@ -209,33 +209,6 @@
     .indicator.active {
         background-color: blue;
     }
-
-    @media (max-width: 768px) {
-        .carousel {
-            display: block;
-            /* Bukan flex agar tidak horizontal */
-            overflow-x: unset;
-            /* Nonaktifkan scroll horizontal */
-            padding: 0;
-        }
-
-        .slide-group {
-            display: block;
-            /* Supaya item di dalamnya menumpuk ke bawah */
-            margin-bottom: 20px;
-        }
-
-        .card {
-            width: 100%;
-            min-width: unset;
-            margin-bottom: 20px;
-        }
-
-        .indicators {
-            display: none;
-            /* Sembunyikan indikator di mobile */
-        }
-    }
 </style>
 
 <body>
@@ -298,6 +271,91 @@
 
     </div>
     <div class="status-bar">
+    <strong>Status Pekerjaan</strong>
+    <p>7 Kebiasaan Anak</p>
+    <div class="progress-bar">
+        <div class="progress">0%</div>
+    </div>
+</div>
+
+<script>
+    let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
+
+    function updateProgress(data, agama) {
+        const semuaKebiasaan = [
+            'Bangun Pagi',
+            'Beribadah',
+            'BeribadahKristen',
+            'Berolahraga',
+            'Gemar Belajar',
+            'Makan Sehat & Bergizi',
+            'Bermasyarakat',
+            'Istirahat Cukup'
+        ];
+
+        // Filter kebiasaan sesuai agama
+        const kebiasaan = semuaKebiasaan.filter(item => {
+            if (agama === 'Islam') return item !== 'BeribadahKristen';
+            if (agama === 'Kristen') return item !== 'Beribadah';
+            return item !== 'Beribadah' && item !== 'BeribadahKristen'; // Default jika agama tidak diketahui
+        });
+
+        let totalSelesai = 0;
+        let listKebiasaan = '<ul style="list-style:none;">';
+
+        kebiasaan.forEach(function(item) {
+            if (data[item]) {
+                totalSelesai++;
+                listKebiasaan += `<li>✅ ${item}</li>`;
+            } else {
+                listKebiasaan += `<li>⬜ ${item}</li>`;
+            }
+        });
+
+        listKebiasaan += '</ul>';
+        listKebiasaanHtml = listKebiasaan;
+
+        let progress = Math.round((totalSelesai / kebiasaan.length) * 100);
+        $('.progress').css('width', `${progress}%`).text(`${progress}%`);
+    }
+
+    $(document).ready(function() {
+        // Load data dan update progress saat halaman dimuat
+        $.get('/siswa/status-kebiasaan', function(data) {
+            const agamaUser = data.agama || ''; // Misalnya: 'Islam' atau 'Kristen'
+            updateProgress(data, agamaUser);
+        });
+
+        // Modal hanya dibuka saat user klik
+        $('.status-bar').click(function() {
+            const popupContent = `
+                <div class="modal fade" id="kebiasaanModal" tabindex="-1" aria-labelledby="kebiasaanModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="kebiasaanModalLabel">7 Kebiasaan Anak</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${listKebiasaanHtml}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            $('body').append(popupContent);
+            $('#kebiasaanModal').modal('show');
+            $('#kebiasaanModal').on('hidden.bs.modal', function() {
+                $('#kebiasaanModal').remove();
+            });
+        });
+    });
+</script>
+
+    {{-- <div class="status-bar">
         <strong>Status Pekerjaan</strong>
         <p>7 Kebiasaan Anak</p>
         <div class="progress-bar">
@@ -306,12 +364,13 @@
     </div>
 
     <script>
-        let listKebiasaanHtml = '';
+        let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
 
         function updateProgress(data) {
             const kebiasaan = [
                 'Bangun Pagi',
                 'Beribadah',
+                'BeribadahKristen',
                 'Berolahraga',
                 'Gemar Belajar',
                 'Makan Sehat & Bergizi',
@@ -371,114 +430,79 @@
                 });
             });
         });
-    </script>
+    </script> --}}
+
 
 
 
 
     <!-- Modal bangun pagi -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Bangun Pagi</h1>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Bangun Pagi</h1>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('bangunpagi') }}" method="post" id="form-bgnpagi"> <!-- FORM DIMULAI DI SINI -->
+                        @csrf
+                        <div style="text-align: center;">
+                            <p>Waktu saat ini</p>
+                            <span id="current-time"
+                                style="display: block; font-size: 1.9em; font-weight: bold; margin-top: 5px;">
+                                22:11:44
+                            </span>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+
+
+                            <button type="submit" class="btn btn-primary" id="save-btn">
+                                Simpan
+                            </button>
+                        </div>
                 </div>
-                <form action="{{ route('bangunpagi') }}" method="post" id="form-bgnpagi"> <!-- FORM DIMULAI DI SINI -->
-                    @csrf
-                    <div style="text-align: center;">
-                        <p>Waktu saat ini</p>
-                        <span id="current-time"
-                            style="display: block; font-size: 1.9em; font-weight: bold; margin-top: 5px;">
-                            22:11:44
-                        </span>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-
-
-                        <button type="submit" class="btn btn-primary" id="save-btn">
-                            Simpan
-                        </button>
-                    </div>
                 </form>
             </div>
         </div>
-    </div>
 
     <!-- Modal Beribadah -->
     <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Form Beribadah</h5>
+                    <h5 class="modal-title" id="exampleModalBeribadahLabel">Form Beribadah</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
                 <div class="modal-body">
                     <form action="{{ route('beribadah') }}" method="post" id="formBeribadah">
                         @csrf
-
-                        @php
-                            $ibadahList = [
-                                'subuh' => 'Subuh',
-                                'duhur' => 'Dzuhur',
-                                'asar' => 'Ashar',
-                                'magrib' => 'Maghrib',
-                                'isyak' => 'Isya',
-                            ];
-                            $dataIbadah = $rekaps->beribadah ?? null;
-                        @endphp
-
-                        <!-- Checkbox Horizontal -->
-                        <div class="d-flex justify-content-center flex-wrap gap-4 mb-4">
-                            @foreach ($ibadahList as $key => $label)
-                                <div class="text-center">
-                                    <label class="form-check-label d-flex flex-column align-items-center">
-                                        <input type="checkbox" class="form-check-input mb-1 salat-checkbox"
-                                            value="{{ $key }}" {{ $dataIbadah?->$key ? 'checked' : '' }}>
-                                        {{ $label }}
-                                    </label>
-                                    <input type="time" class="salat-time form-control mt-1"
-                                        name="{{ $key }}" value="{{ $dataIbadah?->$key }}"
-                                        {{ $dataIbadah?->$key ? '' : 'hidden' }} readonly hidden>
-                                </div>
-                            @endforeach
+                        <label>Beribadah</label>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="subuh"> Subuh</label>
+                            <input type="time" class="salat-time form-control mt-1" name="subuh" readonly hidden>
                         </div>
-
-                        <!-- Status Table -->
-                        <div class="table-responsive">
-                            <h6 class="text-center mb-3">Status Ibadah Hari Ini:</h6>
-                            <table class="table table-bordered text-center align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        @foreach ($ibadahList as $label)
-                                            <th>{{ $label }}</th>
-                                        @endforeach
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        @foreach ($ibadahList as $key => $label)
-                                            <td>
-                                                @if ($dataIbadah?->$key)
-                                                    <span>{{ $dataIbadah->$key }}</span>
-                                                @else
-                                                    <span class="text-danger fs-4">✘</span>
-                                                @endif
-                                            </td>
-                                        @endforeach
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="dzuhur"> Dzuhur</label>
+                            <input type="time" class="salat-time form-control mt-1" name="duhur" readonly hidden>
                         </div>
-
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="ashar"> Ashar</label>
+                            <input type="time" class="salat-time form-control mt-1" name="asar" readonly hidden>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="maghrib"> Maghrib</label>
+                            <input type="time" class="salat-time form-control mt-1" name="magrib" readonly hidden>
+                        </div>
+                        <div>
+                            <label><input type="checkbox" class="salat-checkbox" value="isya"> Isya</label>
+                            <input type="time" class="salat-time form-control mt-1" name="isyak" readonly hidden>
+                        </div>
                     </form>
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" form="formBeribadah" class="btn btn-primary">Simpan</button>
@@ -486,7 +510,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('.salat-checkbox');
@@ -615,7 +638,7 @@
                         <div class="mb-3">
                             <label for="ket_olahraga" class="form-label">Jenis Olahraga</label>
                             <textarea class="form-control" id="ket_olahraga" name="ket_olahraga" rows="2" required
-                                placeholder="Olahraga Apa Kamu Hari Ini ?">{{ old('ket_olahraga', $rekaps->olahraga?->ket_olahraga ?? '') }}</textarea>
+                                placeholder="Olahraga Apa Kamu Hari Ini ?">{{old('ket_olahraga', $rekaps->olahraga?->ket_olahraga ?? '')}}</textarea>
                         </div>
 
                         <div class="modal-footer">
@@ -797,7 +820,7 @@
     <div class="container">
         <h2 style="text-align: center;">7 KEBIASAAN ANAK</h2>
         <div class="carousel slider" id="carousel">
-            <div class="slide-group ">
+            <div class="slide-group">
                 <div class="card">
                     <h3>Bangun Pagi</h3>
                     <img src="{{ asset('img/clock.png') }}" alt="Bangun Pagi">

@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginAdminController;
 use App\Http\Controllers\DataSiswaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\siswaController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\RekapController;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +16,11 @@ Route::post('/loginadmin', [LoginAdminController::class, 'authenticate'])->name(
 
 Route::get('/admin', [adminController::class, 'index'])->name('admin.index');
 Route::get('/admin/rekap-absensi/{kelas}', [AdminController::class, 'getAbsensi'])->name('getAbsensi');
+
+Route::get('/admin/export/{kelas}', [adminController::class, 'export'])->name('admin.export');
+
+
+
 // KELAS VIII
 
 
@@ -27,7 +33,7 @@ Route::post('/import-siswa', [DataSiswaController::class, 'import'])->name('sisw
 
 
 
-Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
+// Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
 
 Route::get('/search-siswa', [adminController::class, 'search'])->name('siswa.search');
 
@@ -36,9 +42,9 @@ Route::get('/search-siswa', [adminController::class, 'search'])->name('siswa.sea
 
 
 
-Route::get('/rekap/hari-ini', [AdminController::class, 'rekapHariIni'])->name('recap.today');
-Route::get('/rekap/bulan', [SiswaController::class, 'rekapBulan'])->name('recap.month');
-Route::get('/rekap/export-pdf', [AdminController::class, 'exportPdf'])->name('export.pdf');
+// Route::get('/rekap/hari-ini', [AdminController::class, 'rekapHariIni'])->name('recap.today');
+// Route::get('/rekap/bulan', [SiswaController::class, 'rekapBulan'])->name('recap.month');
+// Route::get('/rekap/export-pdf', [AdminController::class, 'exportPdf'])->name('export.pdf');
 
 
 
@@ -52,7 +58,7 @@ Route::middleware(['auth:siswa'])->group(function () {
     Route::post('/bangun-pagi', [siswaController::class, 'bgnPagi'])->name('bangunpagi');
     Route::post('/masyarakat', [siswaController::class, 'Masyarakat'])->name('masyarakat');
     Route::post('/beribadah', [siswaController::class, 'Beribadah'])->name('beribadah');
-    Route::post('/beribadah-kristen', [siswaController::class, 'BeribadahKristen'])->name('beribadahkristen');
+    Route::post('/beribadah-kristen', [siswaController::class, 'Beribadah'])->name('beribadahkristen');
 
     Route::post('/olahraga', [siswaController::class, 'Olahraga'])->name('olahraga');
     Route::post('/belajar', [siswaController::class, 'Belajar'])->name('belajar');
