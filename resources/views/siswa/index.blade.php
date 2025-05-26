@@ -271,6 +271,91 @@
 
     </div>
     <div class="status-bar">
+    <strong>Status Pekerjaan</strong>
+    <p>7 Kebiasaan Anak</p>
+    <div class="progress-bar">
+        <div class="progress">0%</div>
+    </div>
+</div>
+
+<script>
+    let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
+
+    function updateProgress(data, agama) {
+        const semuaKebiasaan = [
+            'Bangun Pagi',
+            'Beribadah',
+            'BeribadahKristen',
+            'Berolahraga',
+            'Gemar Belajar',
+            'Makan Sehat & Bergizi',
+            'Bermasyarakat',
+            'Istirahat Cukup'
+        ];
+
+        // Filter kebiasaan sesuai agama
+        const kebiasaan = semuaKebiasaan.filter(item => {
+            if (agama === 'Islam') return item !== 'BeribadahKristen';
+            if (agama === 'Kristen') return item !== 'Beribadah';
+            return item !== 'Beribadah' && item !== 'BeribadahKristen'; // Default jika agama tidak diketahui
+        });
+
+        let totalSelesai = 0;
+        let listKebiasaan = '<ul style="list-style:none;">';
+
+        kebiasaan.forEach(function(item) {
+            if (data[item]) {
+                totalSelesai++;
+                listKebiasaan += `<li>✅ ${item}</li>`;
+            } else {
+                listKebiasaan += `<li>⬜ ${item}</li>`;
+            }
+        });
+
+        listKebiasaan += '</ul>';
+        listKebiasaanHtml = listKebiasaan;
+
+        let progress = Math.round((totalSelesai / kebiasaan.length) * 100);
+        $('.progress').css('width', `${progress}%`).text(`${progress}%`);
+    }
+
+    $(document).ready(function() {
+        // Load data dan update progress saat halaman dimuat
+        $.get('/siswa/status-kebiasaan', function(data) {
+            const agamaUser = data.agama || ''; // Misalnya: 'Islam' atau 'Kristen'
+            updateProgress(data, agamaUser);
+        });
+
+        // Modal hanya dibuka saat user klik
+        $('.status-bar').click(function() {
+            const popupContent = `
+                <div class="modal fade" id="kebiasaanModal" tabindex="-1" aria-labelledby="kebiasaanModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="kebiasaanModalLabel">7 Kebiasaan Anak</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${listKebiasaanHtml}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            $('body').append(popupContent);
+            $('#kebiasaanModal').modal('show');
+            $('#kebiasaanModal').on('hidden.bs.modal', function() {
+                $('#kebiasaanModal').remove();
+            });
+        });
+    });
+</script>
+
+    {{-- <div class="status-bar">
         <strong>Status Pekerjaan</strong>
         <p>7 Kebiasaan Anak</p>
         <div class="progress-bar">
@@ -345,43 +430,43 @@
                 });
             });
         });
-    </script>
+    </script> --}}
 
 
 
 
 
     <!-- Modal bangun pagi -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Bangun Pagi</h1>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Bangun Pagi</h1>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('bangunpagi') }}" method="post" id="form-bgnpagi"> <!-- FORM DIMULAI DI SINI -->
+                        @csrf
+                        <div style="text-align: center;">
+                            <p>Waktu saat ini</p>
+                            <span id="current-time"
+                                style="display: block; font-size: 1.9em; font-weight: bold; margin-top: 5px;">
+                                22:11:44
+                            </span>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+
+
+                            <button type="submit" class="btn btn-primary" id="save-btn">
+                                Simpan
+                            </button>
+                        </div>
                 </div>
-                <form action="{{ route('bangunpagi') }}" method="post" id="form-bgnpagi"> <!-- FORM DIMULAI DI SINI -->
-                    @csrf
-                    <div style="text-align: center;">
-                        <p>Waktu saat ini</p>
-                        <span id="current-time"
-                            style="display: block; font-size: 1.9em; font-weight: bold; margin-top: 5px;">
-                            22:11:44
-                        </span>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-
-
-                        <button type="submit" class="btn btn-primary" id="save-btn">
-                            Simpan
-                        </button>
-                    </div>
+                </form>
             </div>
-            </form>
         </div>
-    </div>
 
     <!-- Modal Beribadah -->
     <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
@@ -425,7 +510,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('.salat-checkbox');

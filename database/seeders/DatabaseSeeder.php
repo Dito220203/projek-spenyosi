@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         'nis'=>'1234',
         'nama'=>'farhan',
         'kelas'=>'VIIA',
-        'agama'=>'Islam',
+        'agama'=>'Kristen',
         'password' =>  Hash::make('123'),
        ]);
 
@@ -46,6 +46,14 @@ class DatabaseSeeder extends Seeder
         'nis'=>'123456',
         'nama'=>'afni',
         'kelas'=>'VIID',
+        'agama'=>'Islam',
+        'password' =>  Hash::make('123'),
+       ]);
+
+       Siswa::create([
+        'nis'=>'12',
+        'nama'=>'diot',
+        'kelas'=>'IX',
         'agama'=>'Islam',
         'password' =>  Hash::make('123'),
        ]);

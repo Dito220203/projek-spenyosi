@@ -9,14 +9,15 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h1>VII A</h1>
+                                <h1>{{$kelas}}</h1>
                                 <div class="mb-3 d-flex justify-content-between align-items-center">
                                     <div>
 
                                     </div>
                                     <div>
-                                        <a href="{{ route('export.excel', request()->all()) }}" class="btn btn-success">📤
+                                        <a href="{{ route('admin.export', ['kelas' => $kelas]) }}" class="btn btn-success">📤
                                             Export Excel</a>
+
 
 
                                     </div>
@@ -95,14 +96,20 @@
                                                 <td>
                                                     <a href="#" class="btn btn-info btn-sm btn-detail"
                                                         data-nama="{{ $absen->siswa->nama }}"
-                                                         data-bangun="{{ $absen->bangun_pagi->waktu ?? '-' }}"
+                                                          data-agama="{{ $absen->siswa->agama }}"
+                                                        data-bangun="{{ $absen->bangunpagi->waktu ?? '-' }}"
                                                         data-ibadah="{{ $absen->beribadah->keterangan ?? '-' }}"
+                                                        data-subuh="{{ $absen->beribadah->subuh ?? '-' }}"
+                                                        data-duhur="{{ $absen->beribadah->duhur ?? '-' }}"
+                                                        data-asar="{{ $absen->beribadah->asar ?? '-' }}"
+                                                        data-magrib="{{ $absen->beribadah->magrib ?? '-' }}"
+                                                        data-isyak="{{ $absen->beribadah->isyak ?? '-' }}"
                                                         data-ibadah-foto="{{ asset('storage/' . ($absen->beribadah->image ?? 'default.jpg')) }}"
                                                         data-olahraga="{{ $absen->olahraga->ket_olahraga ?? '-' }}"
                                                         data-olahraga-foto="{{ asset('storage/' . ($absen->olahraga->image ?? 'default.jpg')) }}"
                                                         data-belajar="{{ $absen->belajar->ket_belajar ?? '-' }}"
                                                         data-belajar-foto="{{ asset('storage/' . ($absen->belajar->image ?? 'default.jpg')) }}"
-                                                        data-makan="{{ $absen->makan->karbohidrat ?? '-' }}, {{ $absen->makan->protein ?? '-' }}, {{ $absen->makan->serat ?? '-' }}, {{ $absen->makan->minum ?? '-' }}"
+                                                        data-makan="{{ $absen->makan ? implode(', ', array_filter([$absen->makan->karbohidrat, $absen->makan->protein, $absen->makan->serat, $absen->makan->minum])) : '-' }}"
                                                         data-makan-foto="{{ asset('storage/' . ($absen->makan->image ?? 'default.jpg')) }}"
                                                         data-masyarakat="{{ $absen->masyarakat->keterangan ?? '-' }}"
                                                         data-masyarakat-foto="{{ asset('storage/' . ($absen->masyarakat->image ?? 'default.jpg')) }}"
@@ -110,8 +117,6 @@
                                                         Detail
                                                     </a>
                                                 </td>
-
-
                                                 <script>
                                                     document.addEventListener("DOMContentLoaded", function() {
                                                         document.querySelectorAll(".btn-detail").forEach(function(btn) {
@@ -119,17 +124,19 @@
                                                                 e.preventDefault();
 
                                                                 const nama = this.dataset.nama;
-                                                                const detailHTML = `
-                                                                    ${createDetailCard("Bangun Pagi", this.dataset.bangun, this.dataset.bangunFoto)}
-                                                                    ${createDetailCard("Beribadah", this.dataset.ibadah, this.dataset.ibadahFoto)}
-                                                                    ${createDetailCard("Berolahraga", this.dataset.olahraga, this.dataset.olahragaFoto)}
-                                                                    ${createDetailCard("Gemar Belajar", this.dataset.belajar, this.dataset.belajarFoto)}
-                                                                    ${createDetailCard("Makan Sehat & Bergizi", this.dataset.makan, this.dataset.makanFoto)}
-                                                                    ${createDetailCard("Bermasyarakat", this.dataset.masyarakat, this.dataset.masyarakatFoto)}
-                                                                    ${createDetailCard("Istirahat Cukup", this.dataset.istirahat, null)}
-                                                                `;
+                                                                const agama = this.dataset.agama;
 
-                                                                document.getElementById("detailNamaSiswa").innerText = `Nama: ${nama}`;
+                                                                const detailHTML = `
+                                                                ${createDetailCard("Bangun Pagi", this.dataset.bangun)}
+                                                                ${createDetailCard("Beribadah (Umum)", formatIbadah(this))}
+                                                                ${createDetailCard("Berolahraga", this.dataset.olahraga, this.dataset.olahragaFoto)}
+                                                                ${createDetailCard("Gemar Belajar", this.dataset.belajar, this.dataset.belajarFoto)}
+                                                                ${createDetailCard("Makan Sehat & Bergizi", this.dataset.makan, this.dataset.makanFoto)}
+                                                                ${createDetailCard("Bermasyarakat", this.dataset.masyarakat, this.dataset.masyarakatFoto)}
+                                                                ${createDetailCard("Istirahat Cukup", this.dataset.istirahat)}
+                                                            `;
+
+                                                                document.getElementById("detailNamaSiswa").innerText = `Nama: ${nama} | Agama: ${agama}`;
                                                                 document.getElementById("detailIsiKebiasaan").innerHTML = detailHTML;
 
                                                                 const modal = new bootstrap.Modal(document.getElementById(
@@ -138,18 +145,29 @@
                                                             });
                                                         });
 
-                                                        function createDetailCard(judul, keterangan, fotoUrl) {
+                                                        function createDetailCard(judul, keterangan, fotoUrl = null) {
                                                             const foto = fotoUrl ?
-                                                                `<img src="${fotoUrl}" class="img-fluid rounded" style="max-height: 200px;">` : '';
+                                                                `<img src="${fotoUrl}" class="img-fluid rounded mt-2" style="max-height: 200px;">` : '';
                                                             return `
-                                                        <div class="col-md-6">
-                                                            <div class="card shadow-sm p-3">
-                                                                <h6>${judul}</h6>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <div class="card shadow-sm p-3">
+                                                                        <h6>${judul}</h6>
+                                                                        <p>${keterangan}</p>
+                                                                        ${foto}
+                                                                    </div>
+                                                                </div>
+                                                            `;
+                                                        }
 
-                                                                <p>${keterangan}</p>
-                                                                ${foto}
-                                                            </div>
-                                                        </div>`;
+                                                        function formatIbadah(data) {
+                                                            return `
+                                                            Keterangan: ${data.dataset.ibadah}<br>
+                                                            Subuh: ${data.dataset.subuh}<br>
+                                                            Duhur: ${data.dataset.duhur}<br>
+                                                            Asar: ${data.dataset.asar}<br>
+                                                            Magrib: ${data.dataset.magrib}<br>
+                                                            Isyak: ${data.dataset.isyak}
+                                                        `;
                                                         }
                                                     });
                                                 </script>
@@ -161,26 +179,24 @@
                                         @endforelse
                                     </tbody>
                                 </table>
-                                <div class="modal fade" id="modalDetailKebiasaan" tabindex="-1"
-                                    aria-labelledby="modalDetailKebiasaanLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalDetailKebiasaan" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-fullscreen">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalDetailKebiasaanLabel">Detail Kebiasaan
-                                                    Siswa</h5>
+                                                <h5 class="modal-title">Detail Kebiasaan</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Tutup"></button>
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <h5 id="detailNamaSiswa"></h5>
-                                                <hr>
-                                                <div id="detailIsiKebiasaan" class="row g-3">
-                                                    <!-- Konten akan diisi lewat JavaScript -->
-                                                </div>
+                                                <h6 id="detailNamaSiswa" class="mb-3"></h6>
+                                                <div class="row" id="detailIsiKebiasaan"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
 
                             </div>
                         </div>

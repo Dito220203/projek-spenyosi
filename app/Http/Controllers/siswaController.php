@@ -38,15 +38,16 @@ class siswaController extends Controller
 
     public function index()
     {
-        $rekapHari = Siswa::whereHas('rekapabsensi', function ($q) {
-            // $q->where('id_siswa', $this->siswa->rekapabsensi->id);
+        $rekapHari = RekapAbsensi::whereHas('siswa', function ($q) {
+            $q->where('id_siswa', $this->siswa->id);
         })->whereDate('created_at', $this->waktuSekarang)->first();
-        return view('siswa.index', ['siswa' => $this->siswa, 'rekaps' => $rekapHari]);
 
-
+        if ($rekapHari && $rekapHari->id_siswa) {
+            return view('siswa.index', ['siswa' => $this->siswa, 'rekaps' => $rekapHari]);
+        } else {
+            return view('siswa.index', ['siswa' => $this->siswa, 'rekaps' => '']);
+        }
     }
-
-
 
     public function bgnPagi(Request $request)
     {
@@ -229,39 +230,78 @@ class siswaController extends Controller
 
         return redirect('/siswa')->with('success', 'Data berhasil ditambahkan!');
     }
+public function cekStatusKebiasaan()
+{
+    $rekap = RekapAbsensi::where('id_siswa', $this->siswa->id)
+        ->whereDate('created_at', $this->waktuSekarang)
+        ->with([
+            'bangunpagi',
+            'beribadah',
+             'beribadahkristen',
+            'olahraga',
+            'belajar',
+            'makan',
+            'masyarakat',
+            'istirahat'
+        ])
+        ->first();
+
+    $status = [
+        'Bangun Pagi' => (bool) optional($rekap->bangunpagi)->id,
+        'Beribadah' => (bool) optional($rekap->beribadah)->id,
+        'BeribadahKristen' => (bool) optional($rekap->beribadah)->id,
+        'Berolahraga' => (bool) optional($rekap->olahraga)->id,
+        'Gemar Belajar' => (bool) optional($rekap->belajar)->id,
+        'Makan Sehat & Bergizi' => (bool) optional($rekap->makan)->id,
+        'Bermasyarakat' => (bool) optional($rekap->masyarakat)->id,
+        'Istirahat Cukup' => (bool) optional($rekap->istirahat)->id,
+        'agama' => $this->siswa->agama, // Tambahkan ini
+    ];
+
+    return response()->json($status);
+}
 
 
-    public function cekStatusKebiasaan()
-    {
-        $tanggal = Carbon::now()->toDateString();
-        $id = $this->siswa->id;
+    // public function cekStatusKebiasaan()
+    // {
+    //     $rekap = RekapAbsensi::where('id_siswa', $this->siswa->id)
+    //         ->whereDate('created_at', $this->waktuSekarang)
+    //         ->with([
+    //             'bangunpagi',
+    //             'beribadah',
+    //             'olahraga',
+    //             'belajar',
+    //             'makan',
+    //             'masyarakat',
+    //             'istirahat'
+    //         ])
+    //         ->first();
 
-        $status = [
-            'Bangun Pagi' => BangunPagi::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
-            'Beribadah' => Beribadah::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
-            'BeribadahKristen' => BeribadahKristen::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
-            'Berolahraga' => Olahraga::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
-            'Gemar Belajar' => Belajar::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
-            'Makan Sehat & Bergizi' => Makan::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
-            'Bermasyarakat' => Masyarakat::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
-            'Istirahat Cukup' => Istirahat::where('id_siswa', $id)->whereDate('created_at', $tanggal)->exists(),
-        ];
+    //     $status = [
+    //         'Bangun Pagi' => (bool) optional($rekap->bangunpagi)->id,
+    //         'Beribadah' => (bool) optional($rekap->beribadah)->id,
+    //         'Berolahraga' => (bool) optional($rekap->olahraga)->id,
+    //         'Gemar Belajar' => (bool) optional($rekap->belajar)->id,
+    //         'Makan Sehat & Bergizi' => (bool) optional($rekap->makan)->id,
+    //         'Bermasyarakat' => (bool) optional($rekap->masyarakat)->id,
+    //         'Istirahat Cukup' => (bool) optional($rekap->istirahat)->id,
+    //     ];
 
-        return response()->json($status);
-    }
+    //     return response()->json($status);
+    // }
 
     // rekap
-        public function exportExcel(Request $request)
-    {
-           $kelas = $request->kelas;
-        $bulan = $request->bulan;
-        $tahun = $request->tahun;
+    //     public function exportExcel(Request $request)
+    // {
+    //        $kelas = $request->kelas;
+    //     $bulan = $request->bulan;
+    //     $tahun = $request->tahun;
 
-        return Excel::download(
-            new RekapAbsensi($kelas, $bulan, $tahun),
-            'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
-        );
-    }
+    //     return Excel::download(
+    //         new RekapAbsensi($kelas, $bulan, $tahun),
+    //         'rekap_kelas_'.$kelas.'_bulan_'.$bulan.'.xlsx'
+    //     );
+    // }
 
 
     private function simpanKebiasaan($fieldName, $kebiasaanId)

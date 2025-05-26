@@ -24,11 +24,15 @@ class RekapAbsensi extends Model
     }
     public function belajar(): belongsTo
     {
-        return $this->belongsTo(Belajar::class, "id_siswa");
+        return $this->belongsTo(Belajar::class, "id_belajar");
     }
     public function beribadah(): belongsTo
     {
         return $this->belongsTo(Beribadah::class, "id_beribadah");
+    }
+    public function beribadahkristen(): belongsTo
+    {
+        return $this->belongsTo(Beribadah::class, "id_beribadahkristen");
     }
     public function istirahat(): belongsTo
     {
@@ -52,5 +56,12 @@ class RekapAbsensi extends Model
         return $query->whereHas('siswa', function ($q) use ($kelas) {
             $q->where('kelas', $kelas);
         });
+    }
+
+    public function isFilled()
+    {
+        return $this->id_bangun_pagi || $this->id_belajar || $this->id_beribadah ||
+            $this->id_istirahat || $this->id_makan || $this->id_masyarakat ||
+            $this->id_olahraga;
     }
 }

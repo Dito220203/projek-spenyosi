@@ -36,6 +36,8 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Bootstrap 4 -->
+
 
     {{-- <style>
           /* Membuat animasi teks berjalan terus-menerus dari kanan ke kiri */
@@ -73,7 +75,7 @@
 
 
     <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">Spenyosi 7 Kebiasaan anak</a>.</strong>
         All rights reserved.
         <div class="float-right d-none d-sm-inline-block">
             <b>Version</b> 3.2.0

@@ -158,8 +158,74 @@
                     </ul>
                 </li>
 
+                  <li class="nav-item ">
+                    <a href="#" class="nav-link ">
+                        <i class="nav-icon fa-solid fa-landmark"></i>
+                        <p>
+                            KELAS IX
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXA']) }}" class="nav-link ">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX A</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXB']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX B</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXC']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX C</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXD']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX D</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXE']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX E</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXF']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX F</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXG']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX G</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXH']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX H</p>
+                            </a>
+                        </li>`
+                        <li class="nav-item">
+                            <a href="{{ route('getAbsensi', ['kelas' => 'IXI']) }}" class="nav-link">
+                                <i class="fa-solid fa-house-user nav-icon"></i>
+                                <p>IX I</p>
+                            </a>
+                        </li>
+                    </ul>
+                   </li>
+
                 <li class="nav-item">
-                    <a href="Datasiswa" class="nav-link">
+                    <a href="/Datasiswa" class="nav-link">
                         <i class="fa-solid fa-user-plus nav-icon"></i>
                         <p>
                             DATA SISWA

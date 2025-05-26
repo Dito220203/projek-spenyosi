@@ -13,9 +13,10 @@ class Siswa extends Authenticatable
 {
     use HasFactory, Notifiable;
     protected $table =  'siswas';
-    protected $fillable = ['nis','nama','kelas','agama','password'];
+    protected $fillable = ['nis', 'nama', 'kelas', 'agama', 'password'];
 
-   public function rekapabsensi ():HasMany{
-    return $this->hasMany(RekapAbsensi::class,'id_siswa');
-   }
+    public function rekapabsensi(): HasMany
+    {
+        return $this->hasMany(RekapAbsensi::class, 'id_siswa');
+    }
 }
