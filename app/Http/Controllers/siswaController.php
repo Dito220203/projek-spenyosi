@@ -248,14 +248,14 @@ public function cekStatusKebiasaan()
         ->first();
 
     $status = [
-        'Bangun Pagi' => (bool) optional($rekap->bangunpagi)->id,
-        'Beribadah' => (bool) optional($rekap->beribadah)->id,
-        'BeribadahKristen' => (bool) optional($rekap->beribadah)->id,
-        'Berolahraga' => (bool) optional($rekap->olahraga)->id,
-        'Gemar Belajar' => (bool) optional($rekap->belajar)->id,
-        'Makan Sehat & Bergizi' => (bool) optional($rekap->makan)->id,
-        'Bermasyarakat' => (bool) optional($rekap->masyarakat)->id,
-        'Istirahat Cukup' => (bool) optional($rekap->istirahat)->id,
+        'Bangun Pagi' => (bool) $rekap?->bangunpagi?->id,
+        'Beribadah' => (bool) optional($rekap?->beribadah)->id,
+        'BeribadahKristen' => (bool) optional($rekap?->beribadah)->id,
+        'Berolahraga' => (bool) optional($rekap?->olahraga)->id,
+        'Gemar Belajar' => (bool) optional($rekap?->belajar)->id,
+        'Makan Sehat & Bergizi' => (bool) optional($rekap?->makan)->id,
+        'Bermasyarakat' => (bool) optional($rekap?->masyarakat)->id,
+        'Istirahat Cukup' => (bool) optional($rekap?->istirahat)->id,
         'agama' => $this->siswa->agama, // Tambahkan ini
     ];
 

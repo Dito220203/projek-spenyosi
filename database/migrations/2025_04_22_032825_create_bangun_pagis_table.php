@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('bangun_pagis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_siswa')->constrained('siswas')->onDelete('cascade'); 
             $table->time('waktu');
-           
+
             $table->timestamps();
         });
     }

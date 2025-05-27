@@ -15,6 +15,6 @@ class BangunPagi extends Model
     protected $fillable = ['waktu'];
 
     public function rekapabsensi():HasOne{
-        return $this->hasOne(Siswa::class,'id_siswa');
+        return $this->hasOne(RekapAbsensi::class,'id_bangun_pagi');
     }
 }
