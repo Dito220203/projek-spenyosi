@@ -25,7 +25,7 @@
         <div class="content-header">
             <div class="container-fluid">
 
-                <div class="row mb-2">
+                <div class="row">
                     <div class="col-12 d-flex justify-content-between align-items-center">
                         <h2 class="mb-0">📋 Data Siswa</h2>
 
@@ -39,17 +39,22 @@
                                 </div>
                             </form>
 
-                            <button class="btn btn-success" data-toggle="modal" data-target="#tambahModal">➕ Tambah
-                                Siswa</button>
+
                         </div>
+
                     </div>
                 </div>
+                <div class="d-flex mb-2">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#tambahModal">➕ Tambah
+                        Siswa</button>
+                </div>
                 {{-- search --}}
-                <form action="Datasiswa" method="GET" class="mb-3 d-flex">
-                    <input type="text" name="search" class="form-control me-2"
-                        placeholder="Cari nama / NIS / kelas / agama" value="{{ request('search') }}">
-                    <button type="submit" class="btn btn-primary">Cari</button>
+                <form action="Datasiswa" method="GET" class="d-flex mb-2" style="max-width: 400px;">
+                    <input name="search" class="form-control form-control-sm me-2" placeholder="Cari..."
+                        value="{{ request('search') }}">
+                    <button class="btn btn-sm btn-primary">Cari</button>
                 </form>
+
                 <div class="card shadow">
                     <div class="card-body">
                         <table class="table table-hover table-bordered table-striped">
@@ -79,6 +84,7 @@
                                                 ✏️ Update
                                             </button>
                                         </td>
+
                                     </tr>
                                 @empty
                                     <tr>
@@ -91,7 +97,8 @@
                         {{-- Optional: Pagination --}}
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <div class="text-muted">
-                                Menampilkan {{ $siswaList->firstItem() }} sampai {{ $siswaList->lastItem() }} dari total
+                                Menampilkan {{ $siswaList->firstItem() }} sampai {{ $siswaList->lastItem() }} dari
+                                total
                                 {{ $siswaList->total() }} data
                             </div>
                             <div>
@@ -134,7 +141,15 @@
 
                                     <div class="form-group">
                                         <label>Agama</label>
-                                        <input type="text" class="form-control" name="agama" required>
+                                        <select class="form-control" name="agama" required>
+                                            <option value="">-- Pilih Agama --</option>
+                                            <option value="Islam">Islam</option>
+                                            <option value="Kristen">Kristen</option>
+                                            <option value="Katolik">Katolik</option>
+                                            <option value="Hindu">Hindu</option>
+                                            <option value="Buddha">Buddha</option>
+                                            <option value="Konghucu">Konghucu</option>
+                                        </select>
                                     </div>
                                 </div>
 

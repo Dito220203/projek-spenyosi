@@ -34,70 +34,88 @@ class adminController extends Controller
     {
         $totalSiswa = Siswa::count();
 
-// --- Perhitungan untuk chart kedua (status per kebiasaan) ---
-$kebiasaanLabels = [
-    'Bangun Pagi', 'Belajar', 'Beribadah', 'Makan', 'Olahraga', 'Istirahat', 'Masyarakat'
-];
-$kebiasaanModels = [ // Mapping nama kebiasaan ke Modelnya
-    'Bangun Pagi' => BangunPagi::class,
-    'Belajar' => Belajar::class,
-    'Beribadah' => Beribadah::class,
-    'Makan' => Makan::class,
-    'Olahraga' => Olahraga::class,
-    'Istirahat' => Istirahat::class,
-    'Masyarakat' => Masyarakat::class,
-];
+        // --- Perhitungan untuk chart kedua (status per kebiasaan) ---
+        $kebiasaanLabels = [
+            'Bangun Pagi',
+            'Belajar',
+            'Beribadah',
+            'Makan',
+            'Olahraga',
+            'Istirahat',
+            'Masyarakat'
+        ];
+        $kebiasaanModels = [ // Mapping nama kebiasaan ke Modelnya
+            'Bangun Pagi' => BangunPagi::class,
+            'Belajar' => Belajar::class,
+            'Beribadah' => Beribadah::class,
+            'Makan' => Makan::class,
+            'Olahraga' => Olahraga::class,
+            'Istirahat' => Istirahat::class,
+            'Masyarakat' => Masyarakat::class,
+        ];
 
-$chartValuesKebiasaan = [];
-foreach ($kebiasaanLabels as $label) {
-    $modelClass = $kebiasaanModels[$label];
-    $count = $modelClass::whereDate('created_at', Carbon::today())
-                          ->distinct('id')
-                          ->count('id');
-    $chartValuesKebiasaan[] = $count;
-}
+        $chartValuesKebiasaan = [];
+        foreach ($kebiasaanLabels as $label) {
+            $modelClass = $kebiasaanModels[$label];
+            $count = $modelClass::whereDate('created_at', Carbon::today())
+                ->distinct('id')
+                ->count('id');
+            $chartValuesKebiasaan[] = $count;
+        }
 
-// --- Perhitungan untuk chart pertama (umum) ---
-// Untuk performansi, Anda bisa mengambil semua siswa_id unik dari SEMUA kebiasaan hari ini
-// dan kemudian menghitung total siswa yang sudah mengisi dari sana.
+        // --- Perhitungan untuk chart pertama (umum) ---
+        // Untuk performansi, Anda bisa mengambil semua siswa_id unik dari SEMUA kebiasaan hari ini
+        // dan kemudian menghitung total siswa yang sudah mengisi dari sana.
 
-// Contoh: Jika definisi "sudah mengisi" adalah minimal satu kebiasaan dari 7 kebiasaan hari ini
-$allSiswaIdsFilledToday = collect(); // Menggunakan Laravel Collection
+        // Contoh: Jika definisi "sudah mengisi" adalah minimal satu kebiasaan dari 7 kebiasaan hari ini
+        $allSiswaIdsFilledToday = collect(); // Menggunakan Laravel Collection
 
-foreach ($kebiasaanModels as $modelClass) {
-    $ids = $modelClass::whereDate('created_at', Carbon::today())->pluck('id');
-    $allSiswaIdsFilledToday = $allSiswaIdsFilledToday->merge($ids);
-}
+        foreach ($kebiasaanModels as $modelClass) {
+            $ids = $modelClass::whereDate('created_at', Carbon::today())->pluck('id');
+            $allSiswaIdsFilledToday = $allSiswaIdsFilledToday->merge($ids);
+        }
 
-$siswaSudahMengisiKebiasaanUmum = $allSiswaIdsFilledToday->unique()->count();
-$siswaBelumMengisiKebiasaanUmum = $totalSiswa - $siswaSudahMengisiKebiasaanUmum;
+        $siswaSudahMengisiKebiasaanUmum = $allSiswaIdsFilledToday->unique()->count();
+        $siswaBelumMengisiKebiasaanUmum = $totalSiswa - $siswaSudahMengisiKebiasaanUmum;
 
 
-$chartDataUmum = [
-    'labels' => ['Siswa Sudah Mengisi', 'Siswa Belum Mengisi'],
-    'data' => [$siswaSudahMengisiKebiasaanUmum, $siswaBelumMengisiKebiasaanUmum],
-    'backgroundColor' => ['#28a745', '#dc3545'],
-];
+        $chartDataUmum = [
+            'labels' => ['Siswa Sudah Mengisi', 'Siswa Belum Mengisi'],
+            'data' => [$siswaSudahMengisiKebiasaanUmum, $siswaBelumMengisiKebiasaanUmum],
+            'backgroundColor' => ['#28a745', '#dc3545'],
+        ];
 
-$chartDataKebiasaan = [
-    'labels' => $kebiasaanLabels,
-    'data' => $chartValuesKebiasaan,
-    'backgroundColor' => [
-        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#808080'
-    ],
-    'borderColor' => [
-        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#808080'
-    ],
-    'borderWidth' => 1
-];
+        $chartDataKebiasaan = [
+            'labels' => $kebiasaanLabels,
+            'data' => $chartValuesKebiasaan,
+            'backgroundColor' => [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+                '#4BC0C0',
+                '#9966FF',
+                '#FF9F40',
+                '#808080'
+            ],
+            'borderColor' => [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+                '#4BC0C0',
+                '#9966FF',
+                '#FF9F40',
+                '#808080'
+            ],
+            'borderWidth' => 1
+        ];
 
-return view('admin.index', compact(
-    'totalSiswa',
-    'siswaSudahMengisiKebiasaanUmum',
-    'siswaBelumMengisiKebiasaanUmum',
-    'chartDataUmum',
-    'chartDataKebiasaan'
-));
+        return view('admin.index', compact(
+            'totalSiswa',
+            'siswaSudahMengisiKebiasaanUmum',
+            'siswaBelumMengisiKebiasaanUmum',
+            'chartDataUmum',
+            'chartDataKebiasaan'
+        ));
     }
 
 
@@ -109,19 +127,18 @@ return view('admin.index', compact(
             $rekapAbsensi = RekapAbsensi::with(['siswa', 'bangunpagi', 'belajar', 'beribadah', 'istirahat', 'makan', 'masyarakat', 'olahraga'])->byKelas($kelas)->get();
         }
 
-        return view('admin.rekapAbsen', compact('rekapAbsensi','kelas'));
+        return view('admin.rekapAbsen', compact('rekapAbsensi', 'kelas'));
     }
 
 
-  public function export(Request $request, $kelas)
-{
-  $bulan = $request->input('bulan'); // misalnya dikirim dari form/select
-    return Excel::download(new RekapAbsensiExport($kelas, $bulan), "rekap-absensi-{$kelas}-bulan{$bulan}.xlsx");
+    public function export(Request $request, $kelas)
+    {
+        $bulan = $request->input('bulan'); // misalnya dikirim dari form/select
+        return Excel::download(new RekapAbsensiExport($kelas, $bulan), "rekap-absensi-{$kelas}-bulan{$bulan}.xlsx");
+    }
+
+    public function delete(string $id){
+         Siswa::where('id', $id)->delete();
+        return redirect('/Datasiswa')->with('success', 'Data berhasil dihapus');
+    }
 }
-
-}
-
-
-
-
-

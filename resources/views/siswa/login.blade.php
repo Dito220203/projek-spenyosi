@@ -142,6 +142,19 @@
                 </li>
             </ul>
         </form>
+        <script>
+            document.querySelector('form').addEventListener('submit', function(e) {
+                const loginButton = document.querySelector('button[type="submit"]');
+
+                // Ubah isi tombol jadi loading spinner + teks
+                loginButton.innerHTML =
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+
+                // Disable tombol agar tidak diklik dua kali
+                loginButton.disabled = true;
+            });
+        </script>
+
     </div>
 </body>
 

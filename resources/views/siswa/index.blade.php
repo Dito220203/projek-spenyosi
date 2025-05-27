@@ -190,25 +190,34 @@
 
     }
 
-
     .indicators {
-        display: flex;
-        justify-content: center;
-        margin-top: 10px;
+        display: none;
+        /* default: disembunyikan */
     }
 
-    .indicator {
-        width: 10px;
-        height: 10px;
-        margin: 0 5px;
-        background-color: lightgray;
-        border-radius: 50%;
-        cursor: pointer;
+    @media (max-width: 768px) {
+        .indicators {
+            display: flex;
+            /* atau block, tergantung kebutuhan */
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .indicator.active {
+            background-color: #007bff;
+        }
+
     }
 
-    .indicator.active {
-        background-color: blue;
-    }
 </style>
 
 <body>
@@ -271,64 +280,64 @@
 
     </div>
     <div class="status-bar">
-    <strong>Status Pekerjaan</strong>
-    <p>7 Kebiasaan Anak</p>
-    <div class="progress-bar">
-        <div class="progress">0%</div>
+        <strong>Status Pekerjaan</strong>
+        <p>7 Kebiasaan Anak</p>
+        <div class="progress-bar">
+            <div class="progress">0%</div>
+        </div>
     </div>
-</div>
 
-<script>
-    let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
+    <script>
+        let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
 
-    function updateProgress(data, agama) {
-        const semuaKebiasaan = [
-            'Bangun Pagi',
-            'Beribadah',
-            'BeribadahKristen',
-            'Berolahraga',
-            'Gemar Belajar',
-            'Makan Sehat & Bergizi',
-            'Bermasyarakat',
-            'Istirahat Cukup'
-        ];
+        function updateProgress(data, agama) {
+            const semuaKebiasaan = [
+                'Bangun Pagi',
+                'Beribadah',
+                'BeribadahKristen',
+                'Berolahraga',
+                'Gemar Belajar',
+                'Makan Sehat & Bergizi',
+                'Bermasyarakat',
+                'Istirahat Cukup'
+            ];
 
-        // Filter kebiasaan sesuai agama
-        const kebiasaan = semuaKebiasaan.filter(item => {
-            if (agama === 'Islam') return item !== 'BeribadahKristen';
-            if (agama === 'Kristen') return item !== 'Beribadah';
-            return item !== 'Beribadah' && item !== 'BeribadahKristen'; // Default jika agama tidak diketahui
-        });
+            // Filter kebiasaan sesuai agama
+            const kebiasaan = semuaKebiasaan.filter(item => {
+                if (agama === 'Islam') return item !== 'BeribadahKristen';
+                if (agama === 'Kristen') return item !== 'Beribadah';
+                return item !== 'Beribadah' && item !== 'BeribadahKristen'; // Default jika agama tidak diketahui
+            });
 
-        let totalSelesai = 0;
-        let listKebiasaan = '<ul style="list-style:none;">';
+            let totalSelesai = 0;
+            let listKebiasaan = '<ul style="list-style:none;">';
 
-        kebiasaan.forEach(function(item) {
-            if (data[item]) {
-                totalSelesai++;
-                listKebiasaan += `<li>✅ ${item}</li>`;
-            } else {
-                listKebiasaan += `<li>⬜ ${item}</li>`;
-            }
-        });
+            kebiasaan.forEach(function(item) {
+                if (data[item]) {
+                    totalSelesai++;
+                    listKebiasaan += `<li>✅ ${item}</li>`;
+                } else {
+                    listKebiasaan += `<li>⬜ ${item}</li>`;
+                }
+            });
 
-        listKebiasaan += '</ul>';
-        listKebiasaanHtml = listKebiasaan;
+            listKebiasaan += '</ul>';
+            listKebiasaanHtml = listKebiasaan;
 
-        let progress = Math.round((totalSelesai / kebiasaan.length) * 100);
-        $('.progress').css('width', `${progress}%`).text(`${progress}%`);
-    }
+            let progress = Math.round((totalSelesai / kebiasaan.length) * 100);
+            $('.progress').css('width', `${progress}%`).text(`${progress}%`);
+        }
 
-    $(document).ready(function() {
-        // Load data dan update progress saat halaman dimuat
-        $.get('/siswa/status-kebiasaan', function(data) {
-            const agamaUser = data.agama || ''; // Misalnya: 'Islam' atau 'Kristen'
-            updateProgress(data, agamaUser);
-        });
+        $(document).ready(function() {
+            // Load data dan update progress saat halaman dimuat
+            $.get('/siswa/status-kebiasaan', function(data) {
+                const agamaUser = data.agama || ''; // Misalnya: 'Islam' atau 'Kristen'
+                updateProgress(data, agamaUser);
+            });
 
-        // Modal hanya dibuka saat user klik
-        $('.status-bar').click(function() {
-            const popupContent = `
+            // Modal hanya dibuka saat user klik
+            $('.status-bar').click(function() {
+                const popupContent = `
                 <div class="modal fade" id="kebiasaanModal" tabindex="-1" aria-labelledby="kebiasaanModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -346,14 +355,14 @@
                     </div>
                 </div>`;
 
-            $('body').append(popupContent);
-            $('#kebiasaanModal').modal('show');
-            $('#kebiasaanModal').on('hidden.bs.modal', function() {
-                $('#kebiasaanModal').remove();
+                $('body').append(popupContent);
+                $('#kebiasaanModal').modal('show');
+                $('#kebiasaanModal').on('hidden.bs.modal', function() {
+                    $('#kebiasaanModal').remove();
+                });
             });
         });
-    });
-</script>
+    </script>
 
     {{-- <div class="status-bar">
         <strong>Status Pekerjaan</strong>
@@ -437,36 +446,36 @@
 
 
     <!-- Modal bangun pagi -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Bangun Pagi</h1>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Bangun Pagi</h1>
 
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="{{ route('bangunpagi') }}" method="post" id="form-bgnpagi"> <!-- FORM DIMULAI DI SINI -->
-                        @csrf
-                        <div style="text-align: center;">
-                            <p>Waktu saat ini</p>
-                            <span id="current-time"
-                                style="display: block; font-size: 1.9em; font-weight: bold; margin-top: 5px;">
-                                22:11:44
-                            </span>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-
-
-                            <button type="submit" class="btn btn-primary" id="save-btn">
-                                Simpan
-                            </button>
-                        </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                </form>
+                <form action="{{ route('bangunpagi') }}" method="post" id="form-bgnpagi"> <!-- FORM DIMULAI DI SINI -->
+                    @csrf
+                    <div style="text-align: center;">
+                        <p>Waktu saat ini</p>
+                        <span id="current-time"
+                            style="display: block; font-size: 1.9em; font-weight: bold; margin-top: 5px;">
+                            22:11:44
+                        </span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+
+
+                        <button type="submit" class="btn btn-primary" id="save-btn">
+                            Simpan
+                        </button>
+                    </div>
             </div>
+            </form>
         </div>
+    </div>
 
     <!-- Modal Beribadah -->
     <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
@@ -638,7 +647,7 @@
                         <div class="mb-3">
                             <label for="ket_olahraga" class="form-label">Jenis Olahraga</label>
                             <textarea class="form-control" id="ket_olahraga" name="ket_olahraga" rows="2" required
-                                placeholder="Olahraga Apa Kamu Hari Ini ?">{{old('ket_olahraga', $rekaps->olahraga?->ket_olahraga ?? '')}}</textarea>
+                                placeholder="Olahraga Apa Kamu Hari Ini ?">{{ old('ket_olahraga', $rekaps->olahraga?->ket_olahraga ?? '') }}</textarea>
                         </div>
 
                         <div class="modal-footer">
@@ -793,7 +802,7 @@
                 </div>
                 <form action="{{ route('istirahat') }}" method="post" id="form-istirahat">
                     @csrf
-                    
+
                     <div class="modal-body text-center">
                         <p>Silakan beristirahat sejenak. Waktu saat ini:</p>
                         <h2 id="jamSekarang" class="fw-bold text-dark">--:--:--</h2>
@@ -812,10 +821,6 @@
     <script></script>
 
 
-
-
-
-    {{-- card 7 kebiasaan --}}
 
     <div class="container">
         <h2 style="text-align: center;">7 KEBIASAAN ANAK</h2>
@@ -885,6 +890,10 @@
             <div class="indicator active" onclick="scrollToSlide(0)"></div>
             <div class="indicator" onclick="scrollToSlide(1)"></div>
             <div class="indicator" onclick="scrollToSlide(2)"></div>
+            <div class="indicator" onclick="scrollToSlide(3)"></div>
+            <div class="indicator" onclick="scrollToSlide(4)"></div>
+            <div class="indicator" onclick="scrollToSlide(5)"></div>
+            <div class="indicator" onclick="scrollToSlide(6)"></div>
         </div>
     </div>
 

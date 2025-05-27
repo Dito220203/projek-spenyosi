@@ -148,7 +148,7 @@
                                 <i class="fa-solid fa-house-user nav-icon"></i>
                                 <p>VIII H</p>
                             </a>
-                        </li>`
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('getAbsensi', ['kelas' => 'VIIII']) }}" class="nav-link">
                                 <i class="fa-solid fa-house-user nav-icon"></i>
@@ -214,7 +214,7 @@
                                 <i class="fa-solid fa-house-user nav-icon"></i>
                                 <p>IX H</p>
                             </a>
-                        </li>`
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('getAbsensi', ['kelas' => 'IXI']) }}" class="nav-link">
                                 <i class="fa-solid fa-house-user nav-icon"></i>
