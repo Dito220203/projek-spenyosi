@@ -9,10 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
@@ -28,33 +30,57 @@
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-        @include("components.sidebar")
-        @include("components.navbar")
-        @yield("content")
+        @include('components.sidebar')
+        @include('components.navbar')
+        @yield('content')
     </div>
 
     <footer class="main-footer">
         <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">Spenyosi 7 Kebiasaan anak</a>.</strong>
         All rights reserved.
-        
+
     </footer>
 
     <aside class="control-sidebar control-sidebar-dark">
-        </aside>
-    @if(session('success'))
+    </aside>
+   @if (session('success'))
     <script>
         Swal.fire({
             icon: 'success',
             title: 'Berhasil!',
             text: '{{ session('success') }}',
-            timer: 3000,
-            showConfirmButton: false
+            showConfirmButton: true, // Menampilkan tombol OK
+            confirmButtonText: 'OK'  // Label tombol
         });
     </script>
-    @endif
+@endif
+
 
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    {{-- scrip sercing --}}
+    <script>
+        $(document).ready(function() {
+            $('#searchInput').on('keyup', function() {
+                const query = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('siswa.search') }}",
+                    type: "GET",
+                    data: {
+                        q: query
+                    },
+                    success: function(res) {
+                        $('#siswaTableBody').html(res.html);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error:", xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>

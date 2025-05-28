@@ -28,8 +28,17 @@
                 <div class="row">
                     <div class="col-12 d-flex justify-content-between align-items-center">
                         <h2 class="mb-0">📋 Data Siswa</h2>
-
                         <div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger mt-2">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                    <strong>Perbaiki data di file Excel dan coba unggah kembali.</strong>
+                                </div>
+                            @endif
                             <form action="{{ route('siswa.import') }}" method="POST" enctype="multipart/form-data"
                                 class="mb-2">
                                 @csrf
@@ -38,22 +47,32 @@
                                     <button class="btn btn-success" type="submit">📥 Import Excel</button>
                                 </div>
                             </form>
+                            <script>
+                                document.querySelector('form').addEventListener('submit', function(e) {
+                                    const loginButton = document.querySelector('button[type="submit"]');
 
+                                    // Ubah isi tombol jadi loading spinner + teks
+                                    loginButton.innerHTML =
+                                        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
 
+                                    // Disable tombol agar tidak diklik dua kali
+                                    loginButton.disabled = true;
+                                });
+                            </script>
                         </div>
+
+
+
 
                     </div>
                 </div>
                 <div class="d-flex mb-2">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#tambahModal">➕ Tambah
+                    <button class="btn btn-success  " data-toggle="modal" data-target="#tambahModal" id="tambahForm">➕
+                        Tambah
                         Siswa</button>
                 </div>
-                {{-- search --}}
-                <form action="Datasiswa" method="GET" class="d-flex mb-2" style="max-width: 400px;">
-                    <input name="search" class="form-control form-control-sm me-2" placeholder="Cari..."
-                        value="{{ request('search') }}">
-                    <button class="btn btn-sm btn-primary">Cari</button>
-                </form>
+                <input id="searchInput" name="search" class="d-flex mb-2 w-25" placeholder="Cari...">
+
 
                 <div class="card shadow">
                     <div class="card-body">
@@ -68,7 +87,8 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="siswaTableBody">
+
                                 @forelse ($siswaList as $index => $siswa)
                                     <tr>
                                         <td class="text-center">{{ $index + 1 }}</td>
@@ -136,8 +156,15 @@
 
                                     <div class="form-group">
                                         <label>Kelas</label>
-                                        <input type="text" class="form-control" name="kelas" required>
+                                        <input type="text" class="form-control" name="kelas" id="inputKelas" required
+                                            pattern="^[A-Z]+$"
+                                            title="Kelas hanya boleh huruf besar tanpa spasi dan tanpa angka"
+                                            oninput="this.value = this.value.toUpperCase(); validateKelas();">
+                                        <small id="kelasFeedback" class="text-danger d-none">
+                                            ❌ Format salah. Contoh yang benar: <strong>VIIA</strong>, <strong>VIIIB</strong>
+                                        </small>
                                     </div>
+
 
                                     <div class="form-group">
                                         <label>Agama</label>
@@ -164,7 +191,8 @@
 
 
                 <!-- Modal Edit Siswa -->
-                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <form method="POST" action="" id="editForm">
                             @csrf
@@ -235,6 +263,35 @@
                         });
                     });
                 </script>
+
+                {{-- script tambah siswa kelas --}}
+                <script>
+                    function validateKelas() {
+                        const kelas = document.getElementById('inputKelas');
+                        const feedback = document.getElementById('kelasFeedback');
+                        const pattern = /^[A-Z]+$/;
+
+                        if (!pattern.test(kelas.value)) {
+                            feedback.classList.remove('d-none');
+                        } else {
+                            feedback.classList.add('d-none');
+                        }
+                    }
+
+                    // Validasi saat form disubmit
+                    document.querySelector('tambahForm').addEventListener('submit', function(e) {
+                        const kelas = document.getElementById('inputKelas');
+                        const pattern = /^[A-Z]+$/;
+                        const feedback = document.getElementById('kelasFeedback');
+
+                        if (!pattern.test(kelas.value)) {
+                            feedback.classList.remove('d-none');
+                            kelas.focus();
+                            e.preventDefault();
+                        }
+                    });
+                </script>
+
 
 
             </div>

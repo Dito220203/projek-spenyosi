@@ -108,12 +108,14 @@ $(document).ready(function () {
                 waktu: currentTime,
             }),
 
-            success: function (res) {
-                window.location.href = "/siswa";
+                    success: function (res) {
                 Swal.fire({
                     title: "Data berhasil ditambahkan!",
                     icon: "success",
-                    draggable: true,
+                    draggable: false,
+                }).then(() => {
+                    // Redirect setelah user klik OK di Swal
+                    window.location.href = "/siswa";
                 });
             },
         });

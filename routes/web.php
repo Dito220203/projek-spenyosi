@@ -30,14 +30,17 @@ Route::get('/Datasiswa', [DataSiswaController::class, 'index']);
 Route::post('/Datasiswa', [DataSiswaController::class, 'store'])->name('siswa.store');
 Route::put('/Datasiswa/{id}', [DataSiswaController::class, 'update'])->name('siswa.update');
 Route::delete('/Datasiswa/{id}', [SiswaController::class, 'delete'])->name('siswa.delete');
+Route::post('/Datasiswa/promote', [DataSiswaController::class, 'promote'])->name('Datasiswa.promote');
 
 Route::post('/import-siswa', [DataSiswaController::class, 'import'])->name('siswa.import');
+Route::get('/siswa/search', [DataSiswaController::class, 'search'])->name('siswa.search');
+
 
 
 
 // Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
 
-Route::get('/search-siswa', [adminController::class, 'search'])->name('siswa.search');
+
 
 
 

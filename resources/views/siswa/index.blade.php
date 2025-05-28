@@ -346,7 +346,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                ${listKebiasaanHtml??''}
+                                ${listKebiasaanHtml}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -363,87 +363,6 @@
             });
         });
     </script>
-
-    {{-- <div class="status-bar">
-        <strong>Status Pekerjaan</strong>
-        <p>7 Kebiasaan Anak</p>
-        <div class="progress-bar">
-            <div class="progress">0%</div>
-        </div>
-    </div>
-
-    <script>
-        let listKebiasaanHtml = ''; // Disiapkan supaya bisa dipakai saat modal dibuka
-
-        function updateProgress(data) {
-            const kebiasaan = [
-                'Bangun Pagi',
-                'Beribadah',
-                'BeribadahKristen',
-                'Berolahraga',
-                'Gemar Belajar',
-                'Makan Sehat & Bergizi',
-                'Bermasyarakat',
-                'Istirahat Cukup'
-            ];
-
-            let totalSelesai = 0;
-            let listKebiasaan = '<ul style="list-style:none;">';
-
-            kebiasaan.forEach(function(item) {
-                if (data[item]) {
-                    totalSelesai++;
-                    listKebiasaan += `<li>✅ ${item}</li>`;
-                } else {
-                    listKebiasaan += `<li>⬜ ${item}</li>`;
-                }
-            });
-
-            listKebiasaan += '</ul>';
-            listKebiasaanHtml = listKebiasaan; // Simpan untuk nanti saat modal dibuka
-
-            let progress = Math.round((totalSelesai / kebiasaan.length) * 100);
-            $('.progress').css('width', `${progress}%`).text(`${progress}%`);
-        }
-
-        $(document).ready(function() {
-            // Load data dan update progress saat halaman dimuat
-            $.get('/siswa/status-kebiasaan', function(data) {
-                updateProgress(data);
-            });
-
-            // Modal hanya dibuka saat user klik
-            $('.status-bar').click(function() {
-                const popupContent = `
-                    <div class="modal fade" id="kebiasaanModal" tabindex="-1" aria-labelledby="kebiasaanModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="kebiasaanModalLabel">7 Kebiasaan Anak</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    ${listKebiasaanHtml}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-
-                $('body').append(popupContent);
-                $('#kebiasaanModal').modal('show');
-                $('#kebiasaanModal').on('hidden.bs.modal', function() {
-                    $('#kebiasaanModal').remove();
-                });
-            });
-        });
-    </script> --}}
-
-
-
-
 
     <!-- Modal bangun pagi -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -476,6 +395,7 @@
             </form>
         </div>
     </div>
+
 
     <!-- Modal Beribadah -->
     <div class="modal fade" id="modalIslam" tabindex="-1" aria-labelledby="exampleModalBeribadahLabel"
@@ -611,11 +531,6 @@
             </div>
         </div>
     </div>
-    <script></script>
-
-
-
-
 
     {{-- modal Olahraga --}}
     <div class="modal fade" id="exampleModalOlahraga" tabindex="-1" aria-labelledby="exampleModalOlahragaLabel"
@@ -818,8 +733,6 @@
         </div>
     </div>
 
-    <script></script>
-
 
 
     <div class="container">
@@ -897,17 +810,18 @@
         </div>
     </div>
 
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: '{{ session('success') }}',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        </script>
-    @endif
+  @if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            showConfirmButton: true, // Menampilkan tombol OK
+            confirmButtonText: 'OK'  // Label tombol
+        });
+    </script>
+@endif
+
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
