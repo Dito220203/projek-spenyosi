@@ -11,7 +11,7 @@ class Makan extends Model
 {
     use HasFactory;
     protected $table = 'makans';
-    protected $fillable = ['image','karbohidrat','serat','protein'];
+    protected $fillable = ['image','karbohidrat','serat','protein','minum'];
 
 
 

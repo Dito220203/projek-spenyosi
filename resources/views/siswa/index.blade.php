@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="user-agama" content="{{ auth()->user()->agama }}">
+    {{-- <meta name="user-agama" content="{{ auth()->user()->agama }}"> --}}
 
 
 
@@ -75,6 +75,30 @@
     .user-info h6,
     .user-info a {
         margin: 0;
+    }
+
+    .logout-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        /* background-color: #dc3545; */
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .logout-button i {
+        margin-right: 8px;
+    }
+
+    .logout-button:hover {
+        background-color: #c82333;
     }
 
     .status-bar {
@@ -217,54 +241,9 @@
         }
 
     }
-
 </style>
 
 <body>
-    {{-- <script>
-        $(document).ready(function() {
-            if (!sessionStorage.getItem('sudahMulai')) {
-                Swal.fire({
-                    title: '7 Kebiasaan Anak Indonesia Hebat',
-                    text: 'Ayo mulai perjalanan hebatmu!',
-                    imageUrl: '/images/pop-up-mulai.png',
-                    imageWidth: 400,
-                    imageAlt: '7 Kebiasaan',
-                    confirmButtonText: 'MULAI',
-                    confirmButtonColor: '#FF8C00'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/simpan-kebiasaan',
-                            type: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            data: {
-                                mulai: true
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    sessionStorage.setItem('sudahMulai', 'true');
-                                    window.location.href = '/siswa';
-                                } else {
-                                    alert("Gagal menyimpan data!");
-                                }
-                            },
-                            error: function(xhr) {
-                                console.log("Error:", xhr.responseText);
-                                alert("Terjadi kesalahan, cek console!");
-                            }
-                        });
-                    }
-                });
-            } else {
-                // Reset flag saat halaman /siswa sudah terbuka agar alert bisa muncul lagi kalau user balik
-                sessionStorage.removeItem('sudahMulai');
-            }
-        });
-    </script> --}}
-
     <div class="header">
         <img src="{{ asset('img/logo.png') }}" alt="Logo">
         <span>SPENYOSI</span>
@@ -273,8 +252,16 @@
             <h6>{{ $siswa->nama }}</h6>
             <h6>{{ $siswa->kelas }}</h6>
             <h6>{{ $siswa->agama }}</h6>
-            <a href="/"><i class="fa-solid fa-right-from-bracket"></i></a>
-            {{-- <a href="#">Log Out</a> --}}
+            <form id="logout-form" action="{{ route('logout.siswa') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+
+            <!-- Tombol Logout tetap di pojok kanan atas -->
+            <a href="#" class="logout-button"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+
 
         </div>
 
@@ -810,17 +797,17 @@
         </div>
     </div>
 
-  @if (session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: '{{ session('success') }}',
-            showConfirmButton: true, // Menampilkan tombol OK
-            confirmButtonText: 'OK'  // Label tombol
-        });
-    </script>
-@endif
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: true, // Menampilkan tombol OK
+                confirmButtonText: 'OK' // Label tombol
+            });
+        </script>
+    @endif
 
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

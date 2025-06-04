@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('karbohidrat');
             $table->text('serat');
             $table->text('protein');
+            $table->text('minum');
             $table->timestamps();
         });
     }

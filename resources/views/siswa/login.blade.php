@@ -15,9 +15,7 @@
     </script>
     <style>
         body {
-            /*
-            background: url('') no-repeat center center fixed; */
-            /* Ganti dengan path foto Anda */
+             padding: 10px;
             background-size: cover;
             margin: 0;
             padding: 0;
@@ -40,7 +38,7 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            width: 300px;
             text-align: center;
             /* min-height: 100vh; */
             margin: 0 auto 0px auto;

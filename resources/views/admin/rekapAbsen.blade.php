@@ -9,12 +9,10 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h1>{{$kelas}}</h1>
+                                <h1>  <i class="nav-icon fa-solid fa-landmark"></i> {{$kelas}}</h1>
                                 <div class="mb-3 d-flex justify-content-between align-items-center">
-                                    <div>
 
-                                    </div>
-                                    <div>
+                                    <div >
                                         <a href="{{ route('admin.export', ['kelas' => $kelas]) }}" class="btn btn-success">📤
                                             Export Excel</a>
 
@@ -23,15 +21,6 @@
                                     </div>
                                 </div>
 
-                                <form method="GET" action="{{ url()->current() }}" class="form-inline mb-3">
-                                    <label class="mr-2">Tanggal:</label>
-                                    {{-- <select name="tanggal" class="form-control mr-2">
-                                        @for ($i = 1; $i <= 31; $i++)
-                                            <option value="{{ $i }}"
-                                                {{ request('tanggal') == $i ? 'selected' : '' }}>{{ $i }}
-                                            </option>
-                                        @endfor
-                                    </select> --}}
 
                                     <label class="mr-2">Bulan:</label>
                                     <select name="bulan" class="form-control mr-2">
@@ -46,15 +35,6 @@
                                         @endfor
 
                                     </select>
-
-                                    <label class="mr-2">Tahun:</label>
-                                    {{-- <select name="tahun" class="form-control mr-2">
-                                        @for ($i = date('Y'); $i >= 2020; $i--)
-                                            <option value="{{ $i }}"
-                                                {{ request('tahun') == $i ? 'selected' : '' }}>{{ $i }}
-                                            </option>
-                                        @endfor
-                                    </select> --}}
 
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </form>

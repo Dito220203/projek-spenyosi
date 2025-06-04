@@ -35,16 +35,22 @@ return [
     |
     */
 
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-        'siswa' => [
-            'driver' => 'session',
-            'provider' => 'siswas',
-        ],
+      'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
     ],
+
+    'admin' => [
+        'driver' => 'session',
+        'provider' => 'admins',
+    ],
+
+    'siswa' => [
+        'driver' => 'session',
+        'provider' => 'siswas',
+    ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -63,17 +69,29 @@ return [
     |
     */
 
-    'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
-        ],
-
-        'siswas' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Siswa::class),
-        ],
+   'providers' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\User::class,
     ],
+
+    'admins' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Admin::class,
+    ],
+
+    'siswas' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Siswa::class,
+    ],
+],
+
+
+    // config/auth.php
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------

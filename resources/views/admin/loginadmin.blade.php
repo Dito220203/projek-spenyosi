@@ -15,6 +15,7 @@
     </script>
     <style>
         body {
+              padding: 10px;
             /*
             background: url('') no-repeat center center fixed; */
             /* Ganti dengan path foto Anda */
@@ -40,18 +41,25 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            width: 300px;
             text-align: center;
             /* min-height: 100vh; */
             margin: 0 auto 0px auto;
 
-
         }
+
+        /* Tambah lebar saat tampilan desktop (min-width: 1024px) */
+@media (min-width: 1024px) {
+    .login-container {
+        width: 400px;
+    }
+}
+
 
         .login-container img {
             max-width: 200px;
             height: auto;
-            margin-bottom: 10px;
+            margin-bottom: 8apx;
         }
 
 
@@ -72,7 +80,7 @@
         .login-container input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
@@ -100,7 +108,7 @@
         }
 
         .login-container li {
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -119,13 +127,13 @@
                 @endforeach
             </div>
         @endif
-        <form action="{{ route('loginadmin.authenticate') }}" method="POST">
+        <form action="{{ route('login.admin') }}" method="POST">
 
             @csrf
             <ul>
                 <li>
                     <label for="username">Username:</label>
-                    <input type="text" name="nis" id="username">
+                    <input type="text" name="email" id="username">
                 </li>
                 <li>
                     <label for="password">Password:</label>
@@ -139,6 +147,18 @@
 
             </ul>
         </form>
+           <script>
+            document.querySelector('form').addEventListener('submit', function(e) {
+                const loginButton = document.querySelector('button[type="submit"]');
+
+                // Ubah isi tombol jadi loading spinner + teks
+                loginButton.innerHTML =
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+
+                // Disable tombol agar tidak diklik dua kali
+                loginButton.disabled = true;
+            });
+        </script>
     </div>
 </body>
 

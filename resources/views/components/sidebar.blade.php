@@ -241,13 +241,17 @@
                         </a>
                     </li> --}}
                     <li class="nav-item">
-                        <a href="/loginadmin" class="nav-link">
+                        <form id="logout-form" action="{{ route('logout.admin') }}" method="POST"
+                            style="display: none;">
+                            @csrf
+                        </form>
+                        <a href="#" class="nav-link"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="nav-icon fa-solid fa-right-from-bracket"></i>
-                            <p>
-                                Logout
-                            </p>
+                            <p>Logout</p>
                         </a>
                     </li>
+
 
 
                     {{-- <li class="nav-item "> --}}

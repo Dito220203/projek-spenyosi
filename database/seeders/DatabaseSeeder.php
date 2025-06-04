@@ -18,44 +18,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-       Siswa::create([
-        'nis'=>'123',
-        'nama'=>'dito',
-        'kelas'=>'VIIA',
-        'agama'=>'Islam',
-        'password' =>  Hash::make('123'),
-       ]);
-
-       Siswa::create([
-        'nis'=>'1234',
-        'nama'=>'farhan',
-        'kelas'=>'VIIA',
-        'agama'=>'Kristen',
-        'password' =>  Hash::make('123'),
-       ]);
-
-       Siswa::create([
-        'nis'=>'12345',
-        'nama'=>'ditos',
-        'kelas'=>'VIIC',
-        'agama'=>'Kristen',
-        'password' =>  Hash::make('123'),
-       ]);
-
-       Siswa::create([
-        'nis'=>'123456',
-        'nama'=>'afni',
-        'kelas'=>'VIID',
-        'agama'=>'Islam',
-        'password' =>  Hash::make('123'),
-       ]);
-
-       Siswa::create([
-        'nis'=>'12',
-        'nama'=>'diot',
-        'kelas'=>'IX',
-        'agama'=>'Islam',
-        'password' =>  Hash::make('123'),
-       ]);
+    //    Siswa::create([
+    //     'nis'=>'123',
+    //     'nama'=>'dito',
+    //     'kelas'=>'VIIA',
+    //     'agama'=>'Islam',
+    //     'password' =>  Hash::make('123'),
+    //    ]);
     }
 }

@@ -8,36 +8,31 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginAdminController extends Controller
 {
-public function index() {
-    return view('admin.loginadmin');
-
-}
+    public function index()
+    {
+        return view('admin.loginadmin');
+    }
 
     public function authenticate(Request $request)
     {
-         $request->validate([
-            'nis' => ['required'],
-            'password' => ['required'],
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        $credentials = $request->only('nis','password');
-        if (Auth::guard('siswa')->attempt($credentials)) {
+        if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
-
-            return redirect()->intended('/admin');
+            return redirect()->intended('/admin'); // Sesuaikan tujuan redirect
         }
 
-        return back()->withInput()->withErrors('incorrect username or password');
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ]);
     }
 
-    public function logout(Request $request): RedirectResponse
+
+    public function logout(Request $request)
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
+        Auth::guard('admin')->logout();                     // Keluar dari guard admin
+        $request->session()->invalidate();                  // Hancurkan sesi
+        $request->session()->regenerateToken(); // Regenerasi CSRF token
         return redirect('/login');
     }
 }

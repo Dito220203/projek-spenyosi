@@ -11,54 +11,30 @@ use App\Http\Controllers\RekapController;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::get('/loginadmin', [LoginAdminController::class, 'index'])->name('loginadmin');
-Route::post('/loginadmin', [LoginAdminController::class, 'authenticate'])->name('loginadmin.authenticate');
-
+Route::get('/login', [LoginAdminController::class, 'index'])->name('loginadmin');
+Route::post('/loginadmin', [LoginAdminController::class, 'authenticate'])->name('login.admin');
+Route::middleware(['authadmin'])->group(function () {
 Route::get('/admin', [adminController::class, 'index'])->name('admin.index');
 Route::get('/admin/rekap-absensi/{kelas}', [AdminController::class, 'getAbsensi'])->name('getAbsensi');
-
 Route::get('/admin/export/{kelas}', [adminController::class, 'export'])->name('admin.export');
-// contoh route web.php
-
-
-
-
-// KELAS VIII
-
 
 Route::get('/Datasiswa', [DataSiswaController::class, 'index']);
 Route::post('/Datasiswa', [DataSiswaController::class, 'store'])->name('siswa.store');
 Route::put('/Datasiswa/{id}', [DataSiswaController::class, 'update'])->name('siswa.update');
-Route::delete('/Datasiswa/{id}', [SiswaController::class, 'delete'])->name('siswa.delete');
-Route::post('/Datasiswa/promote', [DataSiswaController::class, 'promote'])->name('Datasiswa.promote');
+Route::delete('/Datasiswa/{id}', [DatasiswaController::class, 'destroy'])->name('siswa.destroy');
 
+Route::post('/Datasiswa/promote', [DataSiswaController::class, 'promote'])->name('Datasiswa.promote');
 Route::post('/import-siswa', [DataSiswaController::class, 'import'])->name('siswa.import');
 Route::get('/siswa/search', [DataSiswaController::class, 'search'])->name('siswa.search');
-
-
-
-
-// Route::get('/export-excel', [adminController::class, 'exportExcel'])->name('export.excel');
-
-
-
-
-
-
-
-
-// Route::get('/rekap/hari-ini', [AdminController::class, 'rekapHariIni'])->name('recap.today');
-// Route::get('/rekap/bulan', [SiswaController::class, 'rekapBulan'])->name('recap.month');
-// Route::get('/rekap/export-pdf', [AdminController::class, 'exportPdf'])->name('export.pdf');
-
-
+Route::post('/logoutadmin', [LoginAdminController::class, 'logout'])->name('logout.admin');
+});
 
 //loginSiswa
-Route::get('/', [LoginController::class, 'index'])->name('login');
+Route::get('/', [LoginController::class, 'index'])->name('loginsiswa');
 Route::post('/login-siswa', [LoginController::class, 'login'])->name('login.post');
 
 //siswa
-Route::middleware(['auth:siswa'])->group(function () {
+Route::middleware(['authsiswa'])->group(function () {
     Route::get('/siswa', [siswaController::class, 'index'])->name('siswa.index');
     Route::post('/bangun-pagi', [siswaController::class, 'bgnPagi'])->name('bangunpagi');
     Route::post('/masyarakat', [siswaController::class, 'Masyarakat'])->name('masyarakat');
@@ -70,4 +46,5 @@ Route::middleware(['auth:siswa'])->group(function () {
     Route::post('/makan', [siswaController::class, 'Makan'])->name('makan');
     Route::post('/istirahat', [siswaController::class, 'Istirahat'])->name('istirahat');
     Route::get('/siswa/status-kebiasaan', [siswaController::class, 'cekStatusKebiasaan']);
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout.siswa');
 });

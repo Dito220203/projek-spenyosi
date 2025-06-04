@@ -39,6 +39,6 @@ public function index() {
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('/');
     }
 }

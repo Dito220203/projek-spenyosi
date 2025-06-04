@@ -59,11 +59,11 @@ class DataSiswaController extends Controller
                 $errors[] = "Baris " . ($i + 1) . " kolom 'kelas' tidak valid: hanya huruf besar tanpa spasi dan angka.";
             }
 
-              // Validasi agama (misalnya kolom D - index 3)
-        $agama = isset($row[3]) ? trim($row[3]) : '';
-        if ($agama !== '' && !preg_match('/^[A-Z][a-zA-Z ]*$/', $agama)) {
-            $errors[] = "Baris " . ($i + 1) . " kolom 'agama' tidak valid: huruf pertama harus huruf besar.";
-        }
+            // Validasi agama (misalnya kolom D - index 3)
+            $agama = isset($row[3]) ? trim($row[3]) : '';
+            if ($agama !== '' && !preg_match('/^[A-Z][a-zA-Z ]*$/', $agama)) {
+                $errors[] = "Baris " . ($i + 1) . " kolom 'agama' tidak valid: huruf pertama harus huruf besar.";
+            }
 
             // Tambahkan validasi lain di sini jika perlu...
         }
@@ -167,7 +167,15 @@ class DataSiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $siswa = Siswa::findOrFail($id);
+
+        // Hapus absensi siswa terlebih dahulu
+        $siswa->rekapabsensi()->delete(); // asumsinya relasi hasMany di model Siswa
+
+        // Baru hapus siswa
+        $siswa->delete();
+
+        return redirect()->back()->with('success', 'Data siswa berhasil dihapus.');
     }
 
     public function search(Request $request)
@@ -204,15 +212,4 @@ class DataSiswaController extends Controller
 
         return response()->json(['html' => $html]);
     }
-
-
-
-    // public function promote(Request $request)
-    // {
-    //     // Naikkan semua siswa dari kelas VII ke VIII
-    //     Siswa::where('kelas', 'VII')->update(['kelas' => 'VIII']);
-
-    //     return redirect()->back()->with('success', 'Semua siswa kelas VII telah dinaikkan ke kelas VIII.');
-    // }
-
 }
